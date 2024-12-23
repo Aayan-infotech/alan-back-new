@@ -1,4 +1,6 @@
 const subsubCategorySchema = require("../models/subSubCategoryModels");
+const categories=require("../models/categoriesModels");
+const subCategories=require("../models/subCategoryModels");
 
 
 // Create a new subsubCategorySchema
@@ -28,8 +30,35 @@ exports.createsubsubCategorySchema = async (req, res) => {
 // Get all subsubCategorySchemas
 exports.getAllsubsubCategorySchemas = async (req, res) => {
   try {
-    const subsubCategorySchemas = await subsubCategorySchema.find().populate('category_id').populate('ins_by');
-    res.status(200).json(subsubCategorySchemas);
+    const subsubCategorySchemas = await subsubCategorySchema.find().populate('ins_by');
+    
+    const categoryIds = subsubCategorySchemas.map(item => item.category_id);
+    const subCategoryIds = subsubCategorySchemas.map(item => item.sub_category_id);
+
+    const categoriesData = await categories.find({ '_id': { $in: categoryIds } });
+    const subCategoriesData = await subCategories.find({ '_id': { $in: subCategoryIds } });
+
+    const formattedData = subsubCategorySchemas.map(item => {
+      const category = categoriesData.find(cat => cat._id.toString() === item.category_id.toString());
+      const subCategory = subCategoriesData.find(subCat => subCat._id.toString() === item.sub_category_id.toString());
+      
+      return {
+        _id: item._id,
+        image: item.image,
+        category_name: category ? category.name : "Unknown",
+        sub_category_name: subCategory ? subCategory.name : "Unknown",
+        name: item.name,
+        status: item.status,
+        ins_date: item.ins_date,
+        ins_ip: item.ins_ip,
+        ins_by: item.ins_by,
+        update_date: item.update_date,
+        update_by: item.update_by,
+        update_ip: item.update_ip,
+      };
+    });
+
+    res.status(200).json(formattedData);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

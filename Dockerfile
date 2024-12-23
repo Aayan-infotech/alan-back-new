@@ -1,4 +1,3 @@
-# Use an official Node.js runtime as a base image
 FROM node:18-alpine
 
 # Set the working directory inside the container

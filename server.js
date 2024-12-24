@@ -41,6 +41,7 @@ const adminUserManageRoutes = require("./routes/adminUserManageRoutes")
 const categoryRoutes  = require("./routes/categoriesRoute")
 const subcategoryRoutes  = require("./routes/SubCategoriesRoute")
 const subSubCategories  = require("./routes/subSubCategoriesRoute")
+const productRoutes = require("./routes/ProductRoutes")
 
 
 app.use('/api', adminUserManageRoutes);
@@ -48,9 +49,7 @@ app.use("/api/appointments", AppointmentRoutes);
 app.use('/api/categories', categoryRoutes );
 app.use('/api/subcategory', subcategoryRoutes );
 app.use('/api/subSubCategories', subSubCategories );
-
-
-
+app.use('/api/Products', productRoutes );
 
 
 // Start Server

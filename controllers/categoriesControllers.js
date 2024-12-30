@@ -1,3 +1,4 @@
+const Product = require('../models/ProductModel');
 // controllers/categoryController.js
 
 const Category = require('../models/categoriesModels');
@@ -22,25 +23,26 @@ exports.createCategory = async (req, res) => {
   }
 };
 
-// exports.createCategory = async (req, res) => {
-//   try {
-//     const { name, status, ins_ip, ins_by } = req.body;
-//     const imagePath = req.file ? req.file.path : ''; // Save the image path
+/*
+exports.getCategories = async (req, res) => {
+  try {
+    // Fetch categories and populate the ins_by and update_by fields
+    const categories = await Category.find().populate('ins_by update_by');
+    
+    // Respond with the categories data
+    res.status(200).json({
+      status: 200,
+      success: true,
+      message: "Categories fetched successfully",
+      data: categories, // Ensure this is the categories data
+    });
+  } catch (error) {
+    // Send an error response if there’s an issue
+    res.status(500).json({ error: error.message });
+  }
+};
 
-//     const newCategory = new Category({
-//       images: imagePath ? [imagePath] : [], // Store image paths as an array
-//       name,
-//       status,
-//       ins_ip,
-//       ins_by,
-//     });
-
-//     await newCategory.save();
-//     res.status(201).json({ message: 'Category created successfully', newCategory });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
+*/
 
 
 
@@ -131,3 +133,52 @@ exports.deleteCategory = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+//wab APPS API
+
+exports.getAllCategories = async (req, res) => {
+  console.log("startttt")
+  try {
+    const categories = await Category.find();
+    console.log("start")
+    if(!categories){
+      res.send("dhfs")
+    }
+    const categoryData = [];
+    for (let category of categories) {
+      const product = await Product.findOne({ category_id: category._id });
+      console.log("product")
+      let type = true; // Default to true
+     if (product) {
+        if (product.sub_category_id && product.sub_category_id !== 'null' &&
+            product.sub_sub_category_id && product.sub_sub_category_id !== 'null') {
+          type = false;
+        }
+      }
+      categoryData.push({
+        _id: category._id,
+        images: category.images,
+        name: category.name,
+        status: category.status,
+        type: type
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      success: true,
+      message: 'Categories fetched successfully',
+      data: categoryData
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      success: false,
+      message: 'Error fetching categories',
+      error: error.message
+    });
+  }
+};
+
+

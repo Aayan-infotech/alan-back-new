@@ -137,7 +137,6 @@ exports.deleteCategory = async (req, res) => {
 //wab APPS API
 
 exports.getAllCategories = async (req, res) => {
-  console.log("startttt")
   try {
     const categories = await Category.find();
     console.log("start")
@@ -147,12 +146,11 @@ exports.getAllCategories = async (req, res) => {
     const categoryData = [];
     for (let category of categories) {
       const product = await Product.findOne({ category_id: category._id });
-      console.log("product")
-      let type = true; // Default to true
+      let isSubCategory = true; // Default to true
      if (product) {
         if (product.sub_category_id && product.sub_category_id !== 'null' &&
             product.sub_sub_category_id && product.sub_sub_category_id !== 'null') {
-          type = false;
+          isSubCategory = false;
         }
       }
       categoryData.push({
@@ -160,7 +158,7 @@ exports.getAllCategories = async (req, res) => {
         images: category.images,
         name: category.name,
         status: category.status,
-        type: type
+        isSubCategory: isSubCategory
       });
     }
 
@@ -180,5 +178,6 @@ exports.getAllCategories = async (req, res) => {
     });
   }
 };
+
 
 

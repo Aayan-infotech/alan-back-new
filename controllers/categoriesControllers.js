@@ -2,14 +2,16 @@ const Product = require('../models/ProductModel');
 // controllers/categoryController.js
 
 const Category = require('../models/categoriesModels');
-
-// Create a new category
+const uploadImages = require("../middlewares/upload");
 exports.createCategory = async (req, res) => {
   try {
-    const { image, name, status, ins_ip, ins_by } = req.body;
+    // Call the reusable uploadImages function
+    const imagePaths = await uploadImages(req);
+
+    const { name, status, ins_ip, ins_by } = req.body;
 
     const newCategory = new Category({
-      image,
+      images: imagePaths,
       name,
       status,
       ins_ip,
@@ -17,11 +19,36 @@ exports.createCategory = async (req, res) => {
     });
 
     await newCategory.save();
-    res.status(201).json({ message: 'Category created successfully', newCategory });
+
+    res.status(201).json({
+      message: "Category created successfully",
+      newCategory,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+// Create a new category
+// exports.createCategory = async (req, res) => {
+//   try {
+//     const { image, name, status, ins_ip, ins_by } = req.body;
+
+//     const newCategory = new Category({
+//       image,
+//       name,
+//       status,
+//       ins_ip,
+//       ins_by,
+//     });
+
+//     await newCategory.save();
+//     res.status(201).json({ message: 'Category created successfully', newCategory });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
 
 /*
 exports.getCategories = async (req, res) => {

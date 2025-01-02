@@ -41,6 +41,7 @@ exports.getSubSubCategoryBysubCategoryId = async (req, res) => {
         sub_category_id: subSubCategory.sub_category_id,
         image: subSubCategory.image,
         name: subSubCategory.name,
+        type: 'subSubCategory',
         status: subSubCategory.status,
       })),
     });

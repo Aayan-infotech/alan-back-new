@@ -182,6 +182,7 @@ exports.getAllCategories = async (req, res) => {
         images: category.images,
         name: category.name,
         status: category.status,
+        type: 'category',
         isSubCategory: isSubCategory,
       });
     }

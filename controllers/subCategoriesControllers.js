@@ -41,6 +41,7 @@ exports.getSubCategoryByCategoryId = async (req, res) => {
           images: [], // Replace with actual images if required
           name: subCategory.name,
           status: subCategory.status,
+          type: 'subCategory',
           isSubSubcategory: !!(product && product.sub_sub_category_id && product.sub_sub_category_id !== 'null'),
         };
       })

@@ -173,11 +173,11 @@ exports.getAllCategories = async (req, res) => {
     const categoryData = [];
     for (let category of categories) {
       const product = await Product.findOne({ category_id: category._id });
-      let isSubCategory = true; // Default to true
+      let isSubCategory = false; // Default to true
      if (product) {
         if (product.sub_category_id && product.sub_category_id !== 'null' &&
             product.sub_sub_category_id && product.sub_sub_category_id !== 'null') {
-          isSubCategory = false;
+          isSubCategory = true;
         }
       }
       categoryData.push({

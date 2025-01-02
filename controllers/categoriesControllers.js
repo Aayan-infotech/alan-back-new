@@ -125,7 +125,7 @@ exports.updateCategory = async (req, res) => {
 //     try {
 //       const { name, status, update_ip, update_by } = req.body;
 //       const imagePath = req.file ? req.file.path : null; // New image path if uploaded
-  
+
 //       const updateData = {
 //         ...(name && { name }),
 //         ...(status !== undefined && { status }),
@@ -133,16 +133,16 @@ exports.updateCategory = async (req, res) => {
 //         ...(update_by && { update_by }),
 //         update_date: Date.now(),
 //       };
-  
+
 //       // If a new image is uploaded, update the images field
 //       if (imagePath) {
 //         updateData.images = [imagePath];
 //       }
-  
+
 //       const updatedCategory = await Category.findByIdAndUpdate(req.params.id, updateData, { new: true });
-  
+
 //       if (!updatedCategory) return res.status(404).json({ message: 'Category not found' });
-  
+
 //       res.status(200).json({ message: 'Category updated successfully', updatedCategory });
 //     } catch (error) {
 //       res.status(500).json({ error: error.message });
@@ -167,25 +167,22 @@ exports.getAllCategories = async (req, res) => {
   try {
     const categories = await Category.find();
     console.log("start")
-    if(!categories){
+    if (!categories) {
       res.send("dhfs")
     }
     const categoryData = [];
     for (let category of categories) {
       const product = await Product.findOne({ category_id: category._id });
-      let isSubCategory = false; // Default to true
-     if (product) {
-        if (product.sub_category_id && product.sub_category_id !== 'null' &&
-            product.sub_sub_category_id && product.sub_sub_category_id !== 'null') {
-          isSubCategory = true;
-        }
-      }
+
+      const isSubCategory =
+        product?.sub_category_id === null && product?.sub_sub_category_id === null;
+
       categoryData.push({
         _id: category._id,
         images: category.images,
         name: category.name,
         status: category.status,
-        isSubCategory: isSubCategory
+        isSubCategory: isSubCategory,
       });
     }
 

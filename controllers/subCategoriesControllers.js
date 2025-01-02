@@ -1,9 +1,10 @@
 const SubCategories = require("../models/subCategoryModels");
-const Product = require('../models/ProductModel');
 const SubCategory = require('../models/subCategoryModels');
 const mongoose = require('mongoose');
 
+const subSubCategory = require('../models/subSubCategoryModels');
 // function to fetch subcategories by category_id
+
 exports.getSubCategoryByCategoryId = async (req, res) => {
   try {
     const { category_id } = req.params;
@@ -32,17 +33,21 @@ exports.getSubCategoryByCategoryId = async (req, res) => {
     // Transform data with isSubSubcategory determination
     const transformedData = await Promise.all(
       subCategories.map(async (subCategory) => {
-        // Fetch products for the current subcategory
-        const product = await Product.findOne({ sub_sub_category_id: subCategory._id });
+        // Check if subSubCategory exists based on sub_category_id
+        const subSubCategoryDoc = await subSubCategory.findOne({ sub_category_id: subCategory._id });
 
+        // Determine if this subCategory has a subSubCategory
+        const isSubSubcategory = subSubCategoryDoc ? true : false;
+
+        // Return the transformed data with the isSubSubcategory flag
         return {
           _id: subCategory._id,
           category_id: subCategory.category_id,
-          images: [], // Replace with actual images if required
+          image: subCategory.image,  // Include image from the subCategory document
           name: subCategory.name,
           status: subCategory.status,
           type: 'subCategory',
-          isSubSubcategory: !!(product && product.sub_sub_category_id && product.sub_sub_category_id !== 'null'),
+          isSubSubcategory: isSubSubcategory, // This is the new flag
         };
       })
     );

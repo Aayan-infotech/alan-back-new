@@ -1,4 +1,6 @@
 const Product = require('../models/ProductModel');
+const subCategory = require('../models/subCategoryModels');
+
 // controllers/categoryController.js
 
 const Category = require('../models/categoriesModels');
@@ -166,17 +168,27 @@ exports.deleteCategory = async (req, res) => {
 exports.getAllCategories = async (req, res) => {
   try {
     const categories = await Category.find();
-    console.log("start")
-    if (!categories) {
-      res.send("dhfs")
+
+    // If no categories are found, return an appropriate message
+    if (!categories || categories.length === 0) {
+      return res.status(404).json({
+        status: 404,
+        success: false,
+        message: 'No categories found'
+      });
     }
+
     const categoryData = [];
+
+    // Loop through each category to find its subcategory
     for (let category of categories) {
-      const product = await Product.findOne({ category_id: category._id });
+      // Find a subcategory by matching the category_id
+      const subCategoryDoc = await subCategory.findOne({ category_id: category._id });
 
-      const isSubCategory =
-        product?.sub_category_id === null && product?.sub_sub_category_id === null;
+      // Check if subCategory exists, then set isSubCategory flag
+      const isSubCategory = subCategoryDoc ? true : false;
 
+      // Push category data with the `isSubCategory` flag
       categoryData.push({
         _id: category._id,
         images: category.images,
@@ -187,6 +199,7 @@ exports.getAllCategories = async (req, res) => {
       });
     }
 
+    // Return the successful response with the category data
     return res.status(200).json({
       status: 200,
       success: true,
@@ -195,6 +208,7 @@ exports.getAllCategories = async (req, res) => {
     });
 
   } catch (error) {
+    // Handle any errors
     return res.status(500).json({
       status: 500,
       success: false,
@@ -203,6 +217,3 @@ exports.getAllCategories = async (req, res) => {
     });
   }
 };
-
-
-

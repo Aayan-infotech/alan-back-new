@@ -42,6 +42,15 @@ const categoryRoutes  = require("./routes/categoriesRoute")
 const subcategoryRoutes  = require("./routes/SubCategoriesRoute")
 const subSubCategories  = require("./routes/subSubCategoriesRoute")
 const productRoutes = require("./routes/ProductRoutes")
+const dimsGridRoutes = require("./routes/dimsGridRoute")
+const dimsFinRoutes = require("./routes/dimsFinRoute")
+const dimsColorRoutes = require("./routes/dimsColorRoute")
+const dimsTamperRoute = require("./routes/dimsTamperRoute")
+const dimsInstRoute = require("./routes/dimsInstRoute")
+const dimsLockRoute = require("./routes/dimsLockRoute")
+const dimsGTypeRoute = require("./routes/dimsGTypeRoute")
+const dimsPSpacingRoute = require("./routes/dimsPSpacingRoute")
+const dimsSWinOpensRoute = require("./routes/dimsSWinOpensRoute")
 
 
 app.use('/api', adminUserManageRoutes);
@@ -49,7 +58,18 @@ app.use("/api/appointments", AppointmentRoutes);
 app.use('/api/categories', categoryRoutes );
 app.use('/api/subcategory', subcategoryRoutes );
 app.use('/api/subSubCategories', subSubCategories );
-app.use('/api/Products', productRoutes );
+app.use('/api/Products', productRoutes);
+app.use('/api/dimsGrid', dimsGridRoutes);
+app.use('/api/dimsFin', dimsFinRoutes);
+app.use('/api/dimsColor', dimsColorRoutes);
+app.use('/api/dimsTamper', dimsTamperRoute);
+app.use('/api/dimsInst', dimsInstRoute);
+app.use('/api/dimsLock', dimsLockRoute);
+app.use('/api/dimsGType', dimsGTypeRoute);
+app.use('/api/dimsPSpacing', dimsPSpacingRoute);
+app.use('/api/dimsSWinOpens', dimsSWinOpensRoute);
+
+
 
 
 // Start Server

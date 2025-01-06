@@ -36,3 +36,34 @@ exports.getDimensionsByTypeAndProductId = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
+
+
+exports.getAllDimsByProductId = async (req, res) => {
+    try {
+        const { Product_id } = req.params;
+
+        // Initialize a response object
+        let formattedProducts = {};
+
+        // Iterate over each model and fetch products with matching Product_id
+        for (let model in dimsModels) {
+            const data = await dimsModels[model].find({ Product_id });
+            formattedProducts[model] = data;
+        }
+
+        // Return the result
+        return res.status(200).json({
+            status: 200,
+            success: true,
+            message: "ALL Dimensions fetched BY ID successfully",
+            data: formattedProducts,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: 500,
+            success: false,
+            message: "Error fetching Dimensions",
+        });
+    }
+};

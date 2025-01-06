@@ -51,6 +51,7 @@ const dimsLockRoute = require("./routes/dimsLockRoute")
 const dimsGTypeRoute = require("./routes/dimsGTypeRoute")
 const dimsPSpacingRoute = require("./routes/dimsPSpacingRoute")
 const dimsSWinOpensRoute = require("./routes/dimsSWinOpensRoute")
+const AllgetDimsRoutes = require("./routes/AllgetDimsRoutes")
 
 
 app.use('/api', adminUserManageRoutes);
@@ -68,6 +69,8 @@ app.use('/api/dimsLock', dimsLockRoute);
 app.use('/api/dimsGType', dimsGTypeRoute);
 app.use('/api/dimsPSpacing', dimsPSpacingRoute);
 app.use('/api/dimsSWinOpens', dimsSWinOpensRoute);
+app.use('/api/dims', AllgetDimsRoutes);
+
 
 
 

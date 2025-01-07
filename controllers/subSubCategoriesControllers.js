@@ -39,7 +39,7 @@ exports.getSubSubCategoryBysubCategoryId = async (req, res) => {
         _id: subSubCategory._id,
         category_id: subSubCategory.category_id,
         sub_category_id: subSubCategory.sub_category_id,
-        image: subSubCategory.image,
+        images: subSubCategory.images,
         name: subSubCategory.name,
         type: 'subSubCategory',
         status: subSubCategory.status,

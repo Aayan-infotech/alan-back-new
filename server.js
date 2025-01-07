@@ -53,6 +53,11 @@ const dimsPSpacingRoute = require("./routes/dimsPSpacingRoute")
 const dimsSWinOpensRoute = require("./routes/dimsSWinOpensRoute")
 const AllgetDimsRoutes = require("./routes/AllgetDimsRoutes")
 
+const uploadRoutes = require("./routes/uploadRoutes");
+
+// Use the upload route for handling uploads
+app.use('/api', uploadRoutes);  // Ensuring the uploadRoutes are connected to /api/upload
+
 
 app.use('/api', adminUserManageRoutes);
 app.use("/api/appointments", AppointmentRoutes);

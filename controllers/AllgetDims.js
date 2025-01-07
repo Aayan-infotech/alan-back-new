@@ -5,11 +5,11 @@ const dimsModels = {
     Fin: require('../models/dimsFinModel'),
     Color: require('../models/dimsColorModel'),
     Tampering: require('../models/dimsTamperModel'),
-    installation: require('../models/dimsInstModel'),
     Lock: require('../models/dimsLockModel'),
     GlassType: require('../models/dimsGTypeModel'),
     PanelSpacing: require('../models/dimsPSpacingModel'),
     SideWindowOpens: require('../models/dimsSWinOpensModel'),
+    installation: require('../models/dimsInstModel'),
 };
 const ProductModel = require('../models/ProductModel'); // Import ProductModel
 

@@ -1,9 +1,7 @@
 require('dotenv').config();
 
-const multer = require('multer');
 const { S3 } = require('@aws-sdk/client-s3');
 const { SecretsManagerClient, GetSecretValueCommand } = require('@aws-sdk/client-secrets-manager');
-const path = require('path');
 
 const secretsManagerClient = new SecretsManagerClient({ region: process.env.AWS_REGION });
 

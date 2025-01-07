@@ -1,7 +1,7 @@
 const SubCategories = require("../models/subCategoryModels");
 const SubCategory = require('../models/subCategoryModels');
 const mongoose = require('mongoose');
-
+const uploadImages = require("../middlewares/upload");
 const subSubCategory = require('../models/subSubCategoryModels');
 // function to fetch subcategories by category_id
 
@@ -71,10 +71,11 @@ exports.getSubCategoryByCategoryId = async (req, res) => {
 // Create a new SubCategories
 exports.createSubCategories = async (req, res) => {
   try {
-    const { image, category_id, name, status, ins_date, ins_ip, ins_by } = req.body;
+    const imagePaths = await uploadImages(req);
+    const { category_id, name, status, ins_date, ins_ip, ins_by } = req.body;
 
     const newSubCategory = new SubCategories({
-      image,
+      images:imagePaths,
       category_id,
       name,
       status,

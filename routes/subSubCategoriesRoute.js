@@ -8,10 +8,11 @@ const {
     deletesubsubCategorySchema,
     getSubSubCategoryBysubCategoryId,
 } = require('../controllers/subSubCategoriesControllers');
+const {uploadToS3}=require('../common/multerConfig');
 
 // Routes for CRUD operations
 router.get('/subcategoryid/:sub_category_id', getSubSubCategoryBysubCategoryId);
-router.post('/', createsubsubCategorySchema);
+router.post('/',uploadToS3, createsubsubCategorySchema);
 router.get('/', getAllsubsubCategorySchemas);
 router.get('/:id', getsubsubCategorySchemaById);
 router.put('/:id', updatesubsubCategorySchema);

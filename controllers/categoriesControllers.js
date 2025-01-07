@@ -8,8 +8,8 @@ const uploadImages = require("../middlewares/upload");
 exports.createCategory = async (req, res) => {
   try {
     // Call the reusable uploadImages function
-    const imagePaths = await uploadImages(req);
-
+    // const imagePaths = await uploadImages(req);
+    const imagePaths = req.fileLocations;
     const { name, status, ins_ip, ins_by } = req.body;
 
     const newCategory = new Category({

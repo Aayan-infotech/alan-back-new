@@ -59,7 +59,8 @@ exports.getSubSubCategoryBysubCategoryId = async (req, res) => {
 exports.createsubsubCategorySchema = async (req, res) => {
   try {
     const { category_id, sub_category_id, name, status, ins_date, ins_ip, ins_by } = req.body;
-    const imagePaths = await uploadImages(req);
+    // const imagePaths = await uploadImages(req);
+    const imagePaths = req.fileLocations;
 
     const newsubSubCategory = new subsubCategorySchema({
       images:imagePaths,

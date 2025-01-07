@@ -1,7 +1,7 @@
 const subsubCategorySchema = require("../models/subSubCategoryModels");
 const categories = require("../models/categoriesModels");
 const subCategories = require("../models/subCategoryModels");
-
+const uploadImages = require("../middlewares/upload");
 
 const mongoose = require('mongoose');
 const SubSubCategory = require('../models/subSubCategoryModels');
@@ -58,10 +58,11 @@ exports.getSubSubCategoryBysubCategoryId = async (req, res) => {
 // Create a new subsubCategorySchema
 exports.createsubsubCategorySchema = async (req, res) => {
   try {
-    const { image, category_id, sub_category_id, name, status, ins_date, ins_ip, ins_by } = req.body;
+    const { category_id, sub_category_id, name, status, ins_date, ins_ip, ins_by } = req.body;
+    const imagePaths = await uploadImages(req);
 
     const newsubSubCategory = new subsubCategorySchema({
-      image,
+      images:imagePaths,
       category_id,
       sub_category_id,
       name,
@@ -95,7 +96,7 @@ exports.getAllsubsubCategorySchemas = async (req, res) => {
 
       return {
         _id: item._id,
-        image: item.image,
+        images: item.images,
         category_name: category ? category.name : "Unknown",
         sub_category_name: subCategory ? subCategory.name : "Unknown",
         name: item.name,

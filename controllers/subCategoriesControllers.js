@@ -71,7 +71,7 @@ exports.getSubCategoryByCategoryId = async (req, res) => {
 // Create a new SubCategories
 exports.createSubCategories = async (req, res) => {
   try {
-    const imagePaths = await uploadImages(req);
+    const imagePaths = req.fileLocations;
     const { category_id, name, status, ins_date, ins_ip, ins_by } = req.body;
 
     const newSubCategory = new SubCategories({

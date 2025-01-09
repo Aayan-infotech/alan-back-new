@@ -12,10 +12,10 @@ exports.addProductImages = async (req, res) => {
     }
 
     try {
-        const { productId } = req.body;
+        const { Product_id } = req.body;
 
         // Validate productId (if required)
-        if (!productId) {
+        if (!Product_id) {
             return res.status(400).json({
                 message: 'Product ID is required!'
             });
@@ -24,7 +24,7 @@ exports.addProductImages = async (req, res) => {
         // Create new ProductImage document
         const newProductImage = new ProductImage({
             images: imagePaths,
-            Product_id: productId,
+            Product_id: Product_id,
         });
 
         // Save the document to the database

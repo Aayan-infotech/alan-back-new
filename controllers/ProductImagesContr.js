@@ -43,33 +43,33 @@ exports.addProductImages = async (req, res) => {
     }
 };
 
-// Function to delete product images by ID
-exports.deleteProductImage = async (req, res) => {
-    try {
-        const { id } = req.params; // Get the ID from the URL params
+// // Function to delete product images by ID
+// exports.deleteProductImage = async (req, res) => {
+//     try {
+//         const { id } = req.params; // Get the ID from the URL params
 
-        // Check if the ProductImage exists
-        const productImage = await ProductImage.findById(id);
-        if (!productImage) {
-            return res.status(404).json({
-                message: 'Product image not found!'
-            });
-        }
+//         // Check if the ProductImage exists
+//         const productImage = await ProductImage.findById(id);
+//         if (!productImage) {
+//             return res.status(404).json({
+//                 message: 'Product image not found!'
+//             });
+//         }
 
-        // Delete the product image
-        await ProductImage.findByIdAndDelete(id);
+//         // Delete the product image
+//         await ProductImage.findByIdAndDelete(id);
 
-        res.status(200).json({
-            message: 'Product image deleted successfully!'
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: 'An error occurred while deleting the product image',
-            error: error.message
-        });
-    }
-};
+//         res.status(200).json({
+//             message: 'Product image deleted successfully!'
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({
+//             message: 'An error occurred while deleting the product image',
+//             error: error.message
+//         });
+//     }
+// };
 
 // Function to get product images by product ID
 exports.getProductImagesByProductId = async (req, res) => {
@@ -97,3 +97,32 @@ exports.getProductImagesByProductId = async (req, res) => {
         });
     }
 };
+
+exports.deleteProductImage = async (req, res) => {
+    try {
+        const { imageId } = req.params;  // Getting image ID from the URL parameter
+
+        // Find the product image document by _id
+        const productImage = await ProductImage.findById(imageId);
+        
+        if (!productImage) {
+            return res.status(404).json({
+                message: 'Product image not found!'
+            });
+        }
+
+        // Delete the product image by its _id
+        await ProductImage.findByIdAndDelete(imageId);
+
+        res.status(200).json({
+            message: 'Product image deleted successfully!'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: 'An error occurred while deleting the product image',
+            error: error.message
+        });
+    }
+};
+

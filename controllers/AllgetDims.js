@@ -84,6 +84,8 @@ exports.getDimensionsByTypeAndProductId = async (req, res) => {
 
 
 
+const ProductImage = require('../models/ProductImgModel'); // Import ProductImage model
+
 exports.getAllDimsByProductId = async (req, res) => {
     try {
         const { Product_id } = req.params;
@@ -101,7 +103,7 @@ exports.getAllDimsByProductId = async (req, res) => {
         // Initialize a response object
         let dimensionsData = {};
 
-        // Iterate over each model and fetch products with matching Product_id
+        // Iterate over each model and fetch dimensions with matching Product_id
         for (let model in dimsModels) {
             const data = await dimsModels[model].find({ Product_id });
             if (data.length > 0) {
@@ -109,14 +111,21 @@ exports.getAllDimsByProductId = async (req, res) => {
             }
         }
 
-        // Structure the response to include product and dimensions data
+        // Fetch images associated with the Product_id
+        const productImages = await ProductImage.find({ Product_id });
+
+        // Flatten the images array to match the desired output format
+        const imageUrls = productImages.flatMap((imageDoc) => imageDoc.images);
+
+        // Structure the response to include product, dimensions, and images data
         return res.status(200).json({
             status: 200,
             success: true,
-            message: "ALL Dimensions and Product fetched BY ID successfully",
+            message: "All Dimensions, Product, and Images fetched by ID successfully",
             data: {
                 product: productData,
                 Dimensions: dimensionsData,
+                images: imageUrls, // Return a flat array of image URLs
             },
         });
     } catch (error) {
@@ -124,7 +133,8 @@ exports.getAllDimsByProductId = async (req, res) => {
         return res.status(500).json({
             status: 500,
             success: false,
-            message: "Error fetching Dimensions and Product",
+            message: "Error fetching Dimensions, Product, and Images",
         });
     }
 };
+

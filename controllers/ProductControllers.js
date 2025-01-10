@@ -154,3 +154,38 @@ exports.getProductByTypeAndId = async (req, res) => {
     });
   }
 };  
+
+
+// DELETE method to delete a product by ID
+exports.deleteProduct = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await Product.findByIdAndDelete(id);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    res.status(200).json({ message: 'Product deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// PUT method to update a product by ID
+// exports.updateProduct = async (req, res) => {
+//   const { id } = req.params;
+//   const updateData = req.body;
+
+//   try {
+//     const product = await Product.findByIdAndUpdate(id, updateData, { new: true });
+//     if (!product) {
+//       return res.status(404).json({ message: 'Product not found' });
+//     }
+//     res.status(200).json({ message: 'Product updated successfully', product });
+//     console.log('Update data:', updateData);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };

@@ -6,9 +6,9 @@ const generateSKU = () => {
 };
 
 const Product = new mongoose.Schema({
-    image: {
-        type: String,
-        required: true,
+    images: {
+        type: Array,
+        required: false,
     },
     price: {
         type: Number,

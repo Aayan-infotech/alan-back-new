@@ -6,11 +6,12 @@ const subCategories = require("../models/subCategoryModels");
 
 // POST method to create a new product
 exports.createProduct = async (req, res) => {
-  const { image, price, category_id, sub_category_id, sub_sub_category_id, name, Description, ins_date, ins_ip, ins_by } = req.body;
+  const imagePaths = req.fileLocations;
+  const { price, category_id, sub_category_id, sub_sub_category_id, name, Description, ins_date, ins_ip, ins_by } = req.body;
 
   try {
     const newProduct = new Product({
-      image,
+      images:imagePaths,
       price: price || null,
       category_id,
       sub_category_id: sub_category_id || null, // If sub_category_id is not provided, set to null

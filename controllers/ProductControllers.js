@@ -129,7 +129,7 @@ exports.getProductByTypeAndId = async (req, res) => {
     // Format the response
     const formattedProducts = products.map(product => ({
       _id: product._id,
-      image: product.image,
+      images: product.images,
       price: product.price,
       name: product.name,
       description: product.Description,

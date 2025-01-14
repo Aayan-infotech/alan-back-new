@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const dimsModels = {
+    whiteHeight:  require('../models/dimsWHmodel'),
     Grid: require('../models/dimsGridModel'),
     Fin: require('../models/dimsFinModel'),
     Color: require('../models/dimsColorModel'),

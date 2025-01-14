@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const whiteHeightSchema = new mongoose.Schema({
-    productId: {
+    Product_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: false, 
         default: null

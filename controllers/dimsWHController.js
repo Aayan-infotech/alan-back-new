@@ -3,10 +3,10 @@ const DimsWhiteHeight = require('../models/dimsWHmodel');
 // Create a new DimsWhiteHeight record
 exports.createDimsWh = async (req, res) => {
     try {
-        const { productId, whiteHeight, value, amount } = req.body;
+        const { Product_id, whiteHeight, value, amount } = req.body;
 
         const newDimsWh = new DimsWhiteHeight({
-            productId,
+            Product_id,
             whiteHeight,
             value,
             amount

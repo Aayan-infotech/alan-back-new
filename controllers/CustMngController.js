@@ -93,3 +93,43 @@ exports.verifyOTP = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
+
+
+
+
+exports.login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Check if email exists in the database
+        const customer = await CustomerManage.findOne({ email });
+        if (!customer) {
+            return res.status(404).json({ message: 'Customer not found.' });
+        }
+
+        // Check if the account is verified (OTP should be null)
+        if (customer.otp !== null) {
+            return res.status(400).json({ message: 'Account not verified. Please verify your email.' });
+        }
+
+        // Check if the password matches
+        const isPasswordValid = await bcrypt.compare(password, customer.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: 'Invalid email or password.' });
+        }
+
+        // Successful login
+        return res.status(200).json({
+            message: 'Login successful.',
+            customer: {
+                id: customer._id,
+                name: customer.name,
+                email: customer.email,
+                mobile: customer.mobile,
+            },
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error.' });
+    }
+};

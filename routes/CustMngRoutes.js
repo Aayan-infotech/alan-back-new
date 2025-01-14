@@ -4,5 +4,6 @@ const CustMngController = require('../controllers/CustMngController');
 
 router.post('/custCreate', CustMngController.createCustAcc);
 router.post('/otpVerify', CustMngController.verifyOTP);
+router.post('/login', CustMngController.login);
 
 module.exports = router;

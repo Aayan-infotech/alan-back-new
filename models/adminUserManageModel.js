@@ -24,23 +24,6 @@ const userManageSchema = new Schema({
     type: String,
     required: true,
   },
-  country_name: {
-    type: String,
-    required: false
-  },
-  address: {
-    type: String,
-    required: false
-  },
-  state: {
-    type: String,
-    required: false
-  },
-  zipCode: {
-    type: String,
-    required: false,
-    match: [/^\d{5}$/, 'Please enter a valid 5-digit zip code.']
-  },
   role: {
     type: String,
     default: 'Super Admin',
@@ -48,7 +31,7 @@ const userManageSchema = new Schema({
   status: {
     type: Number,
     default: 0,
-    required: false,
+    required: true,
   },
   refresh_token: {
     type: String,
@@ -62,13 +45,13 @@ const userManageSchema = new Schema({
   ins_ip: {
     type: String,
     required: false,
-    default: null
+    default: null  
   },
   ins_by: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: false,
-    default: null
+    required: false,  
+    default: null     
   },
   update_date: {
     type: Date,

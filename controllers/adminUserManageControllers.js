@@ -1,42 +1,54 @@
 const User = require('../models/adminUserManageModel');
 const bcrypt = require('bcrypt');
 
-// Create a new user
-// exports.createUser = async (req, res) => {
-//   try {
-//     const { name, email, password, ins_ip, ins_by } = req.body;
-//     const hashedPassword = await bcrypt.hash(password, 10);
 
-//     const newUser = new User({
-//       name,
-//       email,
-//       password: hashedPassword,
-//       ins_ip,
-//       ins_by,
-//     });
+exports.createUser = async (req, res) => {
+  try {
+    const { name, email, mobile, password, ins_ip, country_name, address, state, zipCode } = req.body;
+    const ins_by = req.user ? req.user._id : null; // Set ins_by based on the logged-in user
+  
+    // Hash the password before saving
+    const hashedPassword = await bcrypt.hash(password, 10);
+  
+    // Create a new User instance
+    const newUser = new User({
+      name,
+      email,
+      mobile,
+      password: hashedPassword,
+      ins_ip,
+      ins_by,
+      country_name,
+      address,
+      state,
+      zipCode,
+    });
+  
+    // Save the new user to the database
+    await newUser.save();
+    res.status(201).json({ message: 'User created successfully', data: newUser });
+  } catch (error) {
+    console.error('Error during user creation:', error);
+    res.status(500).json({ message: 'Error creating user', error: error.message });
+  }
+};
 
-//     await newUser.save();
-//     res.status(201).json({ message: 'User created successfully', data: newUser });
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error creating user', error });
-//   }
-// };
+
 
 // exports.createUser = async (req, res) => {
 //     try {
-//       const { name, email, password, ins_ip, ins_by } = req.body;
-      
-//       // Ensure that ins_by is either provided or null
-//       const userInsBy = ins_by ? ins_by : null;
+//       const { name, email, mobile,password, ins_ip } = req.body;
+//       const ins_by = req.user ? req.user._id : null; // Set ins_by based on the logged-in user
   
 //       const hashedPassword = await bcrypt.hash(password, 10);
   
 //       const newUser = new User({
 //         name,
 //         email,
+//         mobile,
 //         password: hashedPassword,
 //         ins_ip,
-//         ins_by: userInsBy, // Use userInsBy (can be null)
+//         ins_by,
 //       });
   
 //       await newUser.save();
@@ -46,30 +58,6 @@ const bcrypt = require('bcrypt');
 //       res.status(500).json({ message: 'Error creating user', error: error.message });
 //     }
 //   };
-
-exports.createUser = async (req, res) => {
-    try {
-      const { name, email, mobile,password, ins_ip } = req.body;
-      const ins_by = req.user ? req.user._id : null; // Set ins_by based on the logged-in user
-  
-      const hashedPassword = await bcrypt.hash(password, 10);
-  
-      const newUser = new User({
-        name,
-        email,
-        mobile,
-        password: hashedPassword,
-        ins_ip,
-        ins_by,
-      });
-  
-      await newUser.save();
-      res.status(201).json({ message: 'User created successfully', data: newUser });
-    } catch (error) {
-      console.error('Error during user creation:', error);
-      res.status(500).json({ message: 'Error creating user', error: error.message });
-    }
-  };
   
   
 

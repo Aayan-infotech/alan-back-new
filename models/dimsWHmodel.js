@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
-const whiteHeight Schema = new mongoose.Schema({
+const widthHeightSchema = new mongoose.Schema({
     Product_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: false, 
         default: null
     },
-    whiteHeight : {
+    widthHeight  : {
         type: String,
         required: true,
         trim: true,
@@ -24,4 +24,4 @@ const whiteHeight Schema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('DimswhiteHeight ', whiteHeight Schema);
+module.exports = mongoose.model('DimswidthHeight', widthHeightSchema);

@@ -1,13 +1,13 @@
-const DimswhiteHeight  = require('../models/dimsWHmodel');
+const DimswidthHeight = require('../models/dimsWHmodel');
 
-// Create a new DimswhiteHeight  record
+// Create a new DimswidthHeight   record
 exports.createDimsWh = async (req, res) => {
     try {
-        const { Product_id, whiteHeight , value, amount } = req.body;
+        const { Product_id, widthHeight, value, amount } = req.body;
 
-        const newDimsWh = new DimswhiteHeight ({
+        const newDimsWh = new DimswidthHeight  ({
             Product_id,
-            whiteHeight ,
+            widthHeight,
             value,
             amount
         });
@@ -21,10 +21,10 @@ exports.createDimsWh = async (req, res) => {
     }
 };
 
-// Get all DimswhiteHeight  records
+// Get all DimswidthHeight   records
 exports.getDimsWh = async (req, res) => {
     try {
-        const dimsWhRecords = await DimswhiteHeight .find();
+        const dimsWhRecords = await DimswidthHeight.find();
         return res.status(200).json(dimsWhRecords);
     } catch (error) {
         console.error(error);
@@ -32,12 +32,12 @@ exports.getDimsWh = async (req, res) => {
     }
 };
 
-// Delete a DimswhiteHeight  record by ID
+// Delete a DimswidthHeight   record by ID
 exports.deleteDimsWh = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const deletedDimsWh = await DimswhiteHeight .findByIdAndDelete(id);
+        const deletedDimsWh = await DimswidthHeight.findByIdAndDelete(id);
 
         if (!deletedDimsWh) {
             return res.status(404).json({ message: "Record not found" });

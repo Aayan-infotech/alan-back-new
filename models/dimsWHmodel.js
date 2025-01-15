@@ -6,7 +6,7 @@ const widthHeightSchema = new mongoose.Schema({
         required: false, 
         default: null
     },
-    widthHeight  : {
+    widthHeight: {
         type: String,
         required: true,
         trim: true,

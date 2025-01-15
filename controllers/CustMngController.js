@@ -8,7 +8,7 @@ const sendOTPEmail = async (email, otp) => {
         service: 'gmail', // Use your email service
         auth: {
             user: process.env.SMTP_USER,
-            pass:  process.env.SMTP_PASS,
+            pass: process.env.SMTP_PASS,
         },
     });
 
@@ -93,9 +93,6 @@ exports.verifyOTP = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error.' });
     }
 };
-
-
-
 
 exports.login = async (req, res) => {
     try {

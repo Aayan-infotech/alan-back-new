@@ -7,13 +7,13 @@ const sendOTPEmail = async (email, otp) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail', // Use your email service
         auth: {
-            user: process.env.SMTP_USER,
+            user: process.env.smtp_user,
             pass: process.env.SMTP_PASS,
         },
     });
 
     const mailOptions = {
-        from: process.env.SMTP_USER,
+        from: process.env.smtp_user,
         to: email,
         subject: 'Your OTP Code',
         text: `Your OTP code is ${otp}`,

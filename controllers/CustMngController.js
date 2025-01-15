@@ -30,7 +30,11 @@ exports.createCustAcc = async (req, res) => {
         // Check if customer already exists
         const existingCustomer = await CustomerManage.findOne({ email });
         if (existingCustomer) {
-            return res.status(400).json({ message: 'Email already registered.' });
+            return res.status(400).json({
+                status: 400,
+                success: false,
+                message: 'Email already registered.',
+            });
         }
 
         // Generate a hashed password
@@ -58,12 +62,18 @@ exports.createCustAcc = async (req, res) => {
         // Send OTP via email
         await sendOTPEmail(email, otp);
 
-        return res.status(201).json({ message: 'Customer created. OTP sent to email.' });
+        return res.status(201).json({
+            status: 201,
+            success: true,
+            message: 'Customer created. OTP sent to email.',
+        });
     } catch (error) {
         console.error(error);
-       
-        
-        return res.status(500).json({ message: process.env.SMTP_USER });
+        return res.status(500).json({
+            status: 500,
+            success: false,
+            message: 'Internal server error.',
+        });
     }
 };
 
@@ -76,12 +86,20 @@ exports.verifyOTP = async (req, res) => {
         const customer = await CustomerManage.findOne({ email });
 
         if (!customer) {
-            return res.status(404).json({ message: 'Customer not found.' });
+            return res.status(404).json({
+                status: 404,
+                success: false,
+                message: 'Customer not found.',
+            });
         }
 
         // Check if the provided OTP matches
         if (customer.otp !== otp) {
-            return res.status(400).json({ message: 'Invalid OTP.' });
+            return res.status(400).json({
+                status: 400,
+                success: false,
+                message: 'Invalid OTP.',
+            });
         }
 
         // Activate the account and clear OTP
@@ -89,13 +107,22 @@ exports.verifyOTP = async (req, res) => {
         customer.otp = null; // Remove OTP
         await customer.save();
 
-        return res.status(200).json({ message: 'Account verified successfully.' });
+        return res.status(200).json({
+            status: 200,
+            success: true,
+            message: 'Account verified successfully.',
+        });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Internal server error.' });
+        return res.status(500).json({
+            status: 500,
+            success: false,
+            message: 'Internal server error.',
+        });
     }
 };
 
+// Customer login
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -103,22 +130,36 @@ exports.login = async (req, res) => {
         // Check if email exists in the database
         const customer = await CustomerManage.findOne({ email });
         if (!customer) {
-            return res.status(404).json({ message: 'Customer not found.' });
+            return res.status(404).json({
+                status: 404,
+                success: false,
+                message: 'Customer not found.',
+            });
         }
 
         // Check if the account is verified (OTP should be null)
         if (customer.otp !== null) {
-            return res.status(400).json({ message: 'Account not verified. Please verify your email.' });
+            return res.status(400).json({
+                status: 400,
+                success: false,
+                message: 'Account not verified. Please verify your email.',
+            });
         }
 
         // Check if the password matches
         const isPasswordValid = await bcrypt.compare(password, customer.password);
         if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid email or password.' });
+            return res.status(401).json({
+                status: 401,
+                success: false,
+                message: 'Invalid email or password.',
+            });
         }
 
         // Successful login
         return res.status(200).json({
+            status: 200,
+            success: true,
             message: 'Login successful.',
             customer: {
                 id: customer._id,
@@ -129,6 +170,11 @@ exports.login = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Internal server error.' });
+        return res.status(500).json({
+            status: 500,
+            success: false,
+            message: 'Internal server error.',
+        });
     }
 };
+

@@ -7,11 +7,11 @@ const subCategories = require("../models/subCategoryModels");
 // POST method to create a new product
 exports.createProduct = async (req, res) => {
   const imagePaths = req.fileLocations;
-  const { price, category_id, sub_category_id, sub_sub_category_id, name, Description, ins_date, ins_ip, ins_by } = req.body;
+  const { price, category_id, sub_category_id, sub_sub_category_id, name, Description, ins_date, ins_ip, ins_by, productFormulaAdded } = req.body;
 
   try {
     const newProduct = new Product({
-      images:imagePaths,
+      images: imagePaths,
       price: price || null,
       category_id,
       sub_category_id: sub_category_id || null, // If sub_category_id is not provided, set to null
@@ -21,6 +21,7 @@ exports.createProduct = async (req, res) => {
       ins_date: ins_date || Date.now(),  // Set default value to current date if not provided
       ins_ip,
       ins_by: ins_by || null, // If ins_by is not provided, set to null
+      productFormulaAdded: productFormulaAdded || 'No', // Default to 'No' if not provided
     });
 
     // Save product to database

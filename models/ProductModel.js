@@ -58,6 +58,12 @@ const Product = new mongoose.Schema({
         required: false,
         default: null
     },
+    productFormulaAdded: {
+        type: String,
+        required: true,
+        enum: ['Yes', 'No'],
+        default: 'No',
+    },
 });
 
 module.exports = mongoose.model('Product', Product);

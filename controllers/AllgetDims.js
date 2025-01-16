@@ -5,7 +5,7 @@ const dimsModels = {
     Grid: require('../models/dimsGridModel'),
     Fin: require('../models/dimsFinModel'),
     Color: require('../models/dimsColorModel'),
-    Tampering: require('../models/dimsTamperModel'),
+    TemperingOption: require('../models/dimsTamperModel'),
     Lock: require('../models/dimsLockModel'),
     GlassType: require('../models/dimsGTypeModel'),
     PanelSpacing: require('../models/dimsPSpacingModel'),

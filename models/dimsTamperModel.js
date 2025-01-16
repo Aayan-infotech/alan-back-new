@@ -6,7 +6,7 @@ const dimsTamperingSchema = new mongoose.Schema({
         required: false,
         default: null
     },
-    Tampering: {
+    TemperingOption: {
         type: String,
         required: true,
     },

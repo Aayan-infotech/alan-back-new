@@ -3,11 +3,11 @@ const dimsTampering = require('../models/dimsTamperModel');
 // POST request: Create a new dimsTampering entry
 exports.createDimsTampering = async (req, res) => {
     try {
-        const { Tampering, value, Product_id } = req.body;
+        const { TemperingOption, value, Product_id } = req.body;
 
         // Create a new dimsTampering document
         const newDimsTampering = new dimsTampering({
-            Tampering,
+            TemperingOption,
             value,
             Product_id,
         });

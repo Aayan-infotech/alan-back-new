@@ -6,7 +6,7 @@ const CustMngSchema = new Schema({
         type: String,
         required: true,
         trim: true,
-        match: /^[a-zA-Z]+$/,
+        match: /^[a-zA-Z]+(?: [a-zA-Z]+)*$/,
     },
     email: {
         type: String,

@@ -5,7 +5,8 @@ const Product = require('../models/ProductModel');
 const formulaMap = {
     "XO_Slider": (h, w) => h * w * 3.694 + 38,
     "XOX_Slider": (h, w) => h * w * 4.639 - 108,
-    "Single_Double_Hung_Windows": (h, w) => h * w * 3.694 + 50,
+    "Single_Hung_Windows": (h, w) => h * w * 3.694 + 50,
+    "Double_Hung_Windows": (h, w) => h * w * 3.694 + 50,
     "Picture_Window": (h, w) => h * w * 3.696 - 50,
 };
 

@@ -55,8 +55,7 @@ const dimsWHroutes = require("./routes/dimsWHroutes")
 const AllgetDimsRoutes = require("./routes/AllgetDimsRoutes")
 const ProductImgRoutes = require("./routes/ProductImgRoutes")
 const CustMngRoutes = require("./routes/CustMngRoutes")
-const prdFrmRoutes = require("./routes/prdFrmRoutes")
-
+const productFormula=require('./routes/prodcutFormulaRoutes')
 
 app.use('/api', adminUserManageRoutes);
 app.use("/api/appointments", AppointmentRoutes);
@@ -77,8 +76,7 @@ app.use('/api/dimsWH', dimsWHroutes);
 app.use('/api/dims', AllgetDimsRoutes);
 app.use('/api/ProductImg', ProductImgRoutes);
 app.use('/api/CustMng', CustMngRoutes);
-app.use('/api/prdFrm', prdFrmRoutes);
-
+app.use('/api/prodFormula',productFormula)
 
 
 

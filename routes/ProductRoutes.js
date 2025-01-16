@@ -8,6 +8,6 @@ router.get('/type/:type/id/:id', getProductByTypeAndId);
 router.post('/',uploadToS3, createProduct);
 router.get('/', getProducts);
 router.delete('/DEL/:id', deleteProduct);
-// router.put('/:id', updateProduct);
+router.put('/:id', updateProduct);
 
 module.exports = router;

@@ -161,7 +161,7 @@ exports.login = async (req, res) => {
         const token = jwt.sign(
             { id: customer._id, email: customer.email },
             process.env.SESSION_SECRET,
-            { expiresIn: '7d' } // Token expires in 1 hour
+            { expiresIn: '7d' } // Token expires in 7 hour
         );
 
         // Successful login with JWT token

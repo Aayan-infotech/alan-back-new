@@ -1,6 +1,7 @@
 const CustomerManage = require('../models/CustMngModel');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 // Function to send OTP via email
 const sendOTPEmail = async (email, otp) => {
@@ -156,11 +157,19 @@ exports.login = async (req, res) => {
             });
         }
 
-        // Successful login
+        // Generate JWT token
+        const token = jwt.sign(
+            { id: customer._id, email: customer.email },
+            process.env.SESSION_SECRET,
+            { expiresIn: '7d' } // Token expires in 1 hour
+        );
+
+        // Successful login with JWT token
         return res.status(200).json({
             status: 200,
             success: true,
             message: 'Login successful.',
+            token: token,
             customer: {
                 id: customer._id,
                 name: customer.name,

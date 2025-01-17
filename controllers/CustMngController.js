@@ -178,3 +178,50 @@ exports.login = async (req, res) => {
     }
 };
 
+
+// Get all customers
+exports.getAllCustomers = async (req, res) => {
+    try {
+        const customers = await CustomerManage.find();
+        res.status(200).json({
+            status: 200,
+            success: true,
+            message: 'Customers retrieved successfully',
+            data: customers
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 500,
+            success: false,
+            message: 'Failed to retrieve customers',
+            error: error.message
+        });
+    }
+};
+
+// Get customer by ID
+exports.getCustomerById = async (req, res) => {
+    try {
+        const customer = await CustomerManage.findById(req.params.id);
+        if (!customer) {
+            return res.status(404).json({
+                status: 404,
+                success: false,
+                message: 'Customer not found'
+            });
+        }
+        res.status(200).json({
+            status: 200,
+            success: true,
+            message: 'Customer retrieved successfully',
+            data: customer
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 500,
+            success: false,
+            message: 'Failed to retrieve customer',
+            error: error.message
+        });
+    }
+};

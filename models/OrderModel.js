@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const OrderSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
-        // ref: 'Customer',
-        required: true,
+         required: true,
     },
     totalPrice: {
         type: Number,
@@ -16,7 +15,6 @@ const OrderSchema = new mongoose.Schema({
     },
     product_id: {
         type: mongoose.Schema.Types.ObjectId,
-        // ref: 'Product', 
         required: true,
     },
     name: {
@@ -29,7 +27,7 @@ const OrderSchema = new mongoose.Schema({
     },
     images: {
         type: [String], 
-        required: true,
+        required: false,
     },
     selectedOptions: {
         type: Map,

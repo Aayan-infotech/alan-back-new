@@ -119,3 +119,47 @@ exports.createOrder = async (req, res) => {
         });
     }
 };
+
+exports.getOrders = async (req, res) => {
+    try {
+        const userId = req.userId;
+
+        // Fetch the orders based on the user ID
+        const orders = await Order.find({ user_id: userId });
+
+        if (!orders.length) {
+            return res.status(404).json({
+                status: 404,
+                success: false,
+                message: 'No orders found for this user',
+                data: null
+            });
+        }
+
+        // Fetch customer data,
+        const customer = await CustomerManage.findById(userId).select('-password -otp -status -ins_ip -_id');
+
+        if (!customer) {
+            return res.status(404).json({
+                status: 404,
+                success: false,
+                message: 'Customer not found',
+                data: null
+            });
+        }
+
+        res.status(200).json({
+            status: 200,
+            success: true,
+            message: 'Data retrieved: orders and customer details successfully',
+            data: { orders, customer }
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 500,
+            success: false,
+            message: 'Internal server error',
+            data: error.message
+        });
+    }
+};

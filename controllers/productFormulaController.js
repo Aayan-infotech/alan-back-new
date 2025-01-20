@@ -10,6 +10,9 @@ const formulaMap = {
     "Picture_Window": (h, w) => h * w * 3.696 - 50,
 };
 
+// Casement Window Formula: Price = UI x 5.37 + 162
+// Awning Window Formula: Price = UI x 4.7 + 235
+
 // Calculate price controller
 exports.calculatePrice = async (req, res) => {
     const { width, height, Product_id, Price } = req.body;

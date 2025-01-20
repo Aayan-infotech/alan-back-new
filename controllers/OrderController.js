@@ -163,3 +163,61 @@ exports.getOrders = async (req, res) => {
         });
     }
 };
+
+// Update Order
+exports.updateOrder = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const updatedData = req.body;
+
+        // Check if the order exists
+        const order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(404).json({
+                message: 'Order not found',
+            });
+        }
+
+        // Update the order with new data
+        const updatedOrder = await Order.findByIdAndUpdate(orderId, updatedData, { new: true });
+
+        res.status(200).json({
+            message: 'Order updated successfully',
+            order: updatedOrder,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: 'Error updating order',
+            error: error.message,
+        });
+    }
+};
+
+// Delete Order
+exports.deleteOrder = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+
+        // Check if the order exists
+        const order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(404).json({
+                message: 'Order not found',
+            });
+        }
+
+        // Delete the order
+        await Order.findByIdAndDelete(orderId);
+
+        res.status(200).json({
+            message: 'Order deleted successfully',
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: 'Error deleting order',
+            error: error.message,
+        });
+    }
+};

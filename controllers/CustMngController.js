@@ -282,9 +282,24 @@ exports.updateCustomer = async (req, res) => {
             return res.status(404).json({ message: 'Customer not found' });
         }
 
-        res.status(200).json({ message: 'Customer updated successfully', data: updatedCustomer });
+        // Construct the response with updated fields
+        const response = {
+            status: 200,
+            success: true,
+            message: 'Customer updated successfully',
+            data: {
+                name: updatedCustomer.name,
+                mobile: updatedCustomer.mobile,
+                state: updatedCustomer.state,
+                zipCode: updatedCustomer.zipCode,
+                address: updatedCustomer.address,
+            },
+        };
+
+        res.status(200).json(response);
     } catch (error) {
         console.error('Error updating customer:', error);
         res.status(500).json({ message: 'Internal server error', error: error.message });
     }
 };
+

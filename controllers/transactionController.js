@@ -108,6 +108,11 @@
 
 // ----------------------------------------
 
+// const paypal = require('@paypal/checkout-server-sdk');
+// const Transaction = require('../models/TransactionModel');
+// const CustomerManage = require('../models/CustMngModel');
+// const Order = require('../models/OrderModel');
+const FinalOrder = require('../models/FinalOrder');
 const paypal = require('@paypal/checkout-server-sdk');
 const Transaction = require('../models/TransactionModel');
 const CustomerManage = require('../models/CustMngModel');
@@ -176,6 +181,132 @@ exports.createPayment = async (req, res) => {
     }
 };
 
+// exports.executePayment = async (req, res) => {
+//     const { token, PayerID } = req.query; // Extract PayPal token as paymentId
+
+//     try {
+//         if (!token || !PayerID) {
+//             console.error('Missing required query parameters:', req.query);
+//             return res.status(400).json({ message: 'Missing required query parameters' });
+//         }
+
+//         // Capture the PayPal payment
+//         const request = new paypal.orders.OrdersCaptureRequest(token);
+//         request.requestBody({});
+//         const response = await client.execute(request);
+
+//         console.log("response", response);
+
+//         const orderId = response.
+//         result.purchase_units[0].payments.captures[0];
+//         const TransactionData = await Transaction.find({ paymentId: response.result.id });
+
+//         console.log("TransactionData", TransactionData);
+
+
+//         const order = await Order.findById(TransactionData[0].order_id);
+//         console.log("orderData", order);
+
+//         if (!order) {
+//             console.error(`Order with ID ${orderId} not found`);
+//             return res.status(404).json({ message: 'Order not found' });
+//         }
+
+//         // Save transaction
+//         const transaction = new Transaction({
+//             userId: req.userId,
+//             order_id: order._id,
+            
+//         });
+
+//         await transaction.save();
+//         res.json({ transaction });
+
+//     } catch (error) {
+//         console.error('Error executing payment:', error.message);
+//         res.status(500).json({ error: error.message });
+//     }
+// };
+
+
+
+
+
+
+
+// exports.executePayment = async (req, res) => {
+//     const { token, PayerID } = req.query; // Extract PayPal token as paymentId
+
+//     try {
+//         if (!token || !PayerID) {
+//             console.error('Missing required query parameters:', req.query);
+//             return res.status(400).json({ message: 'Missing required query parameters' });
+//         }
+
+//         // Capture the PayPal payment
+//         const request = new paypal.orders.OrdersCaptureRequest(token);
+//         request.requestBody({});
+//         const response = await client.execute(request);
+
+//         console.log("response", response);
+
+//         const capturedPayment = response.result;
+//         const paymentId = capturedPayment.id;
+//         const status = capturedPayment.status;
+//         const payment_source = capturedPayment.payment_source;
+//         const payer = capturedPayment.payer;
+//         const purchaseUnit = capturedPayment.purchase_units[0];
+//         const orderDetails = purchaseUnit.payments.captures[0];
+
+//         // Retrieve the transaction details
+//         const transactionData = await Transaction.findOne({ paymentId });
+//         console.log("TransactionData", transactionData);
+
+//         if (!transactionData) {
+//             console.error(`Transaction with Payment ID ${paymentId} not found`);
+//             return res.status(404).json({ message: 'Transaction not found' });
+//         }
+
+//         const order = await Order.findById(transactionData.order_id);
+//         console.log("orderData", order);
+
+//         if (!order) {
+//             console.error(`Order with ID ${transactionData.order_id} not found`);
+//             return res.status(404).json({ message: 'Order not found' });
+//         }
+
+//         // Save the final order to the database
+//         const finalOrder = new FinalOrder({
+//             userId: transactionData.userId,
+//             order_id: order._id,
+//             orderData: {
+//                 product_name: order.name,
+//                 product_sku: order.sku,
+//                 product_price: order.product_price,
+//                 total_price: order.totalPrice,
+//                 selected_options: Object.fromEntries(order.selectedOptions),
+//             },
+//             status: status,
+//             paymentId: paymentId,
+//             quantity: transactionData.quantity,
+//             amount: transactionData.amount,
+//             payment_source: payment_source,
+//             payer: {
+//                 name: payer.name.full_name,
+//                 email: payer.email_address,
+//                 payer_id: payer.payer_id,
+//             },
+//         });
+
+//         await finalOrder.save();
+
+//         res.json({ message: 'Final order saved successfully', finalOrder });
+//     } catch (error) {
+//         console.error('Error executing payment:', error.message);
+//         res.status(500).json({ error: error.message });
+//     }
+// };
+
 exports.executePayment = async (req, res) => {
     const { token, PayerID } = req.query; // Extract PayPal token as paymentId
 
@@ -190,34 +321,79 @@ exports.executePayment = async (req, res) => {
         request.requestBody({});
         const response = await client.execute(request);
 
-        const orderId = response.
-        result.purchase_units[0].payments.captures[0];
-        const TransactionData = await Transaction.find({ paymentId: response.result.id });
-        const order = await Order.findById(TransactionData[0].order_id);
-        console.log(111, order);
+        console.log("response", response);
+
+        const capturedPayment = response.result;
+        const paymentId = capturedPayment.id;
+        const status = capturedPayment.status;
+        const payment_source = capturedPayment.payment_source;
+        const payer = capturedPayment.payer;
+        const purchaseUnit = capturedPayment.purchase_units[0];
+        const orderDetails = purchaseUnit.payments.captures[0];
+
+        // Retrieve the transaction details
+        const transactionData = await Transaction.findOne({ paymentId });
+        console.log("TransactionData", transactionData);
+
+        if (!transactionData) {
+            console.error(`Transaction with Payment ID ${paymentId} not found`);
+            return res.status(404).json({ message: 'Transaction not found' });
+        }
+
+        const order = await Order.findById(transactionData.order_id);
+        console.log("orderData", order);
 
         if (!order) {
-            console.error(`Order with ID ${orderId} not found`);
+            console.error(`Order with ID ${transactionData.order_id} not found`);
             return res.status(404).json({ message: 'Order not found' });
         }
 
-        // Save transaction
-        const transaction = new Transaction({
-            userId: req.userId,
+        // Retrieve CustomerManage data
+        const customerData = await CustomerManage.findById(transactionData.userId);
+        if (!customerData) {
+            console.error(`Customer with ID ${transactionData.userId} not found`);
+            return res.status(404).json({ message: 'Customer not found' });
+        }
+
+        console.log("CustomerData", customerData);
+
+        // Save the final order to the database
+        const finalOrder = new FinalOrder({
+            userId: transactionData.userId,
             order_id: order._id,
-            // amount: response.result.purchase_units[0].amount.value,
-            // // quantity: order.quantity || 1
-            // currency: response.result.purchase_units[0].amount.currency_code,
-            // paymentId: response.result.id,
-            // status: response.result.status,
+            orderData: {
+                product_name: order.name,
+                product_sku: order.sku,
+                product_price: order.product_price,
+                total_price: order.totalPrice,
+                selected_options: Object.fromEntries(order.selectedOptions),
+            },
+            status: status,
+            paymentId: paymentId,
+            quantity: transactionData.quantity,
+            amount: transactionData.amount,
+            payment_source: payment_source,
+            payer: {
+                name: payer.name.full_name,
+                email: payer.email_address,
+                payer_id: payer.payer_id,
+            },
+            customerDetails: {
+                name: customerData.name,
+                email: customerData.email,
+                mobile: customerData.mobile,
+                address: customerData.address,
+                state: customerData.state,
+                zipCode: customerData.zipCode,
+                country_name: customerData.country_name,
+            },
         });
 
-        await transaction.save();
-        res.json({ transaction });
+        await finalOrder.save();
 
+        res.json({ message: 'Final order saved successfully', finalOrder });
     } catch (error) {
         console.error('Error executing payment:', error.message);
         res.status(500).json({ error: error.message });
     }
 };
-

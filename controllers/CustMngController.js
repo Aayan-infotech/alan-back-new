@@ -234,3 +234,57 @@ exports.getCustomerById = async (req, res) => {
         });
     }
 };
+
+// exports.updateCustomer = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const updateData = req.body;
+
+//         // Find the customer by ID and update it with the new data
+//         const updatedCustomer = await CustomerManage.findByIdAndUpdate(
+//             id,
+//             updateData,
+//             { new: true, runValidators: true } // Return the updated document and run validators
+//         );
+
+//         if (!updatedCustomer) {
+//             return res.status(404).json({ message: 'Customer not found' });
+//         }
+
+//         res.status(200).json({ message: 'Customer updated successfully', data: updatedCustomer });
+//     } catch (error) {
+//         console.error('Error updating customer:', error);
+//         res.status(500).json({ message: 'Internal server error', error: error.message });
+//     }
+// };
+
+exports.updateCustomer = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, mobile, state, zipCode, address } = req.body;
+
+        // Create an object with only the fields that should be updated
+        const updateData = {};
+        if (name !== undefined) updateData.name = name;
+        if (mobile !== undefined) updateData.mobile = mobile;
+        if (state !== undefined) updateData.state = state;
+        if (zipCode !== undefined) updateData.zipCode = zipCode;
+        if (address !== undefined) updateData.address = address;
+
+        // Find the customer by ID and update it with the filtered data
+        const updatedCustomer = await CustomerManage.findByIdAndUpdate(
+            id,
+            updateData,
+            { new: true, runValidators: true } // Return the updated document and run validators
+        );
+
+        if (!updatedCustomer) {
+            return res.status(404).json({ message: 'Customer not found' });
+        }
+
+        res.status(200).json({ message: 'Customer updated successfully', data: updatedCustomer });
+    } catch (error) {
+        console.error('Error updating customer:', error);
+        res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};

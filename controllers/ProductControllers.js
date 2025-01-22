@@ -194,15 +194,15 @@ exports.updateProduct = async (req, res) => {
 // Search API for product name or SKU
 exports.searchProduct = async (req, res) => {
   try {
-      const { name, sku } = req.query;
+      const { name, category_id } = req.query;
 
       // Build the query dynamically based on the provided parameters
       let query = {};
+      if (category_id) {
+          query.category_id = category_id; // Match category_id exactly
+      }
       if (name) {
           query.name = { $regex: name, $options: 'i' }; // Case-insensitive search on product name
-      }
-      if (sku) {
-          query.sku = sku; 
       }
 
       const products = await Product.find(query);

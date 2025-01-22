@@ -58,6 +58,7 @@ const CustMngRoutes = require("./routes/CustMngRoutes")
 const productFormula=require('./routes/prodcutFormulaRoutes')
 const orderRoutes=require('./routes/orderRoutes')
 const transactionRoutes=require('./routes/transactionRoutes')
+const WishlistRoutes=require('./routes/WishlistRoutes')
 
 
 app.use('/api', adminUserManageRoutes);
@@ -82,6 +83,7 @@ app.use('/api/CustMng', CustMngRoutes);
 app.use('/api/prodFormula',productFormula)
 app.use('/api/order',orderRoutes );
 app.use('/api/transaction',transactionRoutes)
+app.use('/api/wishlist',WishlistRoutes)
 
 
 

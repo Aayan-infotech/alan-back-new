@@ -195,6 +195,7 @@ exports.updateProduct = async (req, res) => {
 exports.searchProduct = async (req, res) => {
   try {
       const { name, sku } = req.query;
+
       // Build the query dynamically based on the provided parameters
       let query = {};
       if (name) {
@@ -203,13 +204,31 @@ exports.searchProduct = async (req, res) => {
       if (sku) {
           query.sku = sku; 
       }
+
       const products = await Product.find(query);
+
       if (products.length === 0) {
-          return res.status(404).json({ message: 'No products found' });
+          return res.status(404).json({ 
+              status: 404,
+              success: false,
+              message: 'No products found',
+              data: []
+          });
       }
-      return res.status(200).json({ products });
+
+      return res.status(200).json({ 
+          status: 200,
+          success: true,
+          message: 'Products fetched successfully',
+          data: products 
+      });
   } catch (err) {
       console.error(err);
-      return res.status(500).json({ message: 'Server error' });
+      return res.status(500).json({ 
+          status: 500,
+          success: false,
+          message: 'Server error',
+          error: err.message 
+      });
   }
 };

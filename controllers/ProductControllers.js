@@ -190,3 +190,26 @@ exports.updateProduct = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// Search API for product name or SKU
+exports.searchProduct = async (req, res) => {
+  try {
+      const { name, sku } = req.query;
+      // Build the query dynamically based on the provided parameters
+      let query = {};
+      if (name) {
+          query.name = { $regex: name, $options: 'i' }; // Case-insensitive search on product name
+      }
+      if (sku) {
+          query.sku = sku; 
+      }
+      const products = await Product.find(query);
+      if (products.length === 0) {
+          return res.status(404).json({ message: 'No products found' });
+      }
+      return res.status(200).json({ products });
+  } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Server error' });
+  }
+};

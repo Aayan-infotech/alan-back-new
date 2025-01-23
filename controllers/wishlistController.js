@@ -43,18 +43,31 @@ exports.deleteWishlist = async (req, res) => {
         const deletedItem = await Wishlist.findByIdAndDelete(id);
 
         if (!deletedItem) {
-            return res.status(404).json({ message: 'Wishlist item not found' });
+            return res.status(404).json({
+                status: 404,
+                success: false,
+                message: 'Wishlist item not found',
+                data: null
+            });
         }
 
         res.status(200).json({
+            status: 200,
+            success: true,
             message: 'Product removed from wishlist successfully',
             data: deletedItem
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({
+            status: 500,
+            success: false,
+            message: 'Server error',
+            data: null
+        });
     }
 };
+
 
 // Get wishlist products by user_id
 exports.getWishlistByUser = async (req, res) => {

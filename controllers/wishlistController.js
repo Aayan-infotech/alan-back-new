@@ -62,22 +62,25 @@ exports.getWishlistByUser = async (req, res) => {
         const { user_id } = req.params;
 
         // Find all wishlist items for the user
-        const wishlistItems = await Wishlist.find({ user_id }).populate('product_id');
+        const wishlistItems = await Wishlist.find({ user_id }).populate({
+            path: 'product_id',
+            model: 'Product',
+            select: 'name image _id'
+        });
 
-        if (!wishlistItems || wishlistItems.length === 0) {
-            return res.status(404).json({ message: 'No wishlist items found for this user.' });
-        }
-
-        // Extract product IDs and fetch product details
-        const productDetails = await Product.find({
-            _id: { $in: wishlistItems.map(item => item.product_id) }
-        }).select('images name _id');
+        // if (!wishlistItems || wishlistItems.length === 0) {
+        //     return res.status(404).json({ message: 'No wishlist items found for this user.' });
+        // }
+        // // Extract product IDs and fetch product details
+        // const productDetails = await Product.find({
+        //     _id: { $in: wishlistItems.map(item => item.product_id) }
+        // }).select('images name _id');
 
         res.status(200).json({
             status: 200,
             success: true,
             message: 'Wishlist retrieved successfully',
-            data: productDetails
+            data: wishlistItems
         });
     } catch (err) {
         console.error(err);

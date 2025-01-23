@@ -65,7 +65,7 @@ exports.getWishlistByUser = async (req, res) => {
         const wishlistItems = await Wishlist.find({ user_id }).populate({
             path: 'product_id',
             model: 'Product',
-            select: 'name image _id'
+            select: 'name images _id'
         });
 
         // if (!wishlistItems || wishlistItems.length === 0) {

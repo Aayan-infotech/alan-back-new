@@ -59,6 +59,7 @@ const productFormula=require('./routes/prodcutFormulaRoutes')
 const orderRoutes=require('./routes/orderRoutes')
 const transactionRoutes=require('./routes/transactionRoutes')
 const WishlistRoutes=require('./routes/WishlistRoutes')
+const GMCardsRoutes=require('./routes/GMCardsRoutes')
 
 
 app.use('/api', adminUserManageRoutes);
@@ -84,7 +85,8 @@ app.use('/api/prodFormula',productFormula)
 app.use('/api/order',orderRoutes );
 app.use('/api/transaction',transactionRoutes)
 app.use('/api/wishlist',WishlistRoutes)
-
+app.use('/api/GMCards',GMCardsRoutes)
+           
 
 
 // Start Server

@@ -303,3 +303,159 @@ exports.updateCustomer = async (req, res) => {
     }
 };
 
+
+// Change Password
+exports.changePassword = async (req, res) => {
+    try {
+        const { email, oldPassword, newPassword, confirmPassword } = req.body;
+
+        // Check if new and confirm passwords match
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({
+                status: 400,
+                success: false,
+                message: 'New password and confirm password do not match.',
+            });
+        }
+
+        // Find the customer by email
+        const customer = await CustomerManage.findOne({ email });
+
+        if (!customer) {
+            return res.status(404).json({
+                status: 404,
+                success: false,
+                message: 'Customer not found.',
+            });
+        }
+
+        // Check if the old password matches
+        const isOldPasswordValid = await bcrypt.compare(oldPassword, customer.password);
+
+        if (!isOldPasswordValid) {
+            return res.status(401).json({
+                status: 401,
+                success: false,
+                message: 'Old password is incorrect.',
+            });
+        }
+
+        // Hash the new password
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update the customer's password
+        customer.password = hashedNewPassword;
+        await customer.save();
+
+        return res.status(200).json({
+            status: 200,
+            success: true,
+            message: 'Password updated successfully.',
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: 500,
+            success: false,
+            message: 'Internal server error.',
+        });
+    }
+};
+
+// Forget Password with OTP Verification
+exports.forgetPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        // Check if the email exists
+        const customer = await CustomerManage.findOne({ email });
+
+        if (!customer) {
+            return res.status(404).json({
+                status: 404,
+                success: false,
+                message: 'Customer not found.',
+            });
+        }
+
+        // Generate a random OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Save OTP to the customer's record
+        customer.otp = otp;
+        await customer.save();
+
+        // Send OTP via email
+        await sendOTPEmail(email, otp);
+
+        return res.status(200).json({
+            status: 200,
+            success: true,
+            message: 'OTP sent to your email.',
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: 500,
+            success: false,
+            message: 'Internal server error.',
+        });
+    }
+};
+
+// Verify OTP and Reset Password
+exports.verifyForgetPasswordOTP = async (req, res) => {
+    try {
+        const { email, otp, newPassword, confirmPassword } = req.body;
+
+        // Check if passwords match
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({
+                status: 400,
+                success: false,
+                message: 'New password and confirm password do not match.',
+            });
+        }
+
+        // Find the customer by email
+        const customer = await CustomerManage.findOne({ email });
+
+        if (!customer) {
+            return res.status(404).json({
+                status: 404,
+                success: false,
+                message: 'Customer not found.',
+            });
+        }
+
+        // Validate OTP
+        if (customer.otp !== otp) {
+            return res.status(400).json({
+                status: 400,
+                success: false,
+                message: 'Invalid OTP.',
+            });
+        }
+
+        // Hash the new password
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update the password and clear OTP
+        customer.password = hashedNewPassword;
+        customer.otp = null;
+        await customer.save();
+
+        return res.status(200).json({
+            status: 200,
+            success: true,
+            message: 'Password reset successfully.',
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: 500,
+            success: false,
+            message: 'Internal server error.',
+        });
+    }
+};

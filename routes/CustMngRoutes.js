@@ -8,5 +8,8 @@ router.post('/login', CustMngController.login);
 router.get('/customers', CustMngController.getAllCustomers);
 router.get('/customers/:id', CustMngController.getCustomerById);
 router.put('/customers/:id', CustMngController.updateCustomer);
+router.post('/changePassword', CustMngController.changePassword);
+router.post('/forgetPassword', CustMngController.forgetPassword);
+router.post('/verifyForgetPasswordOTP', CustMngController.verifyForgetPasswordOTP);
 
 module.exports = router;

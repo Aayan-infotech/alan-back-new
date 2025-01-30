@@ -57,9 +57,9 @@ exports.getSessionData = async (req, res) => {
     try {
         const { session_id } = req.params;
 
-        const entries = await GuestCardMood.find({ session_id });
+        const orders = await GuestCardMood.find({ session_id });
 
-        if (!entries.length) {
+        if (!orders.length) {
             return res.status(404).json({
                 success: false,
                 message: 'No data found for this session ID',
@@ -71,7 +71,7 @@ exports.getSessionData = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'Data retrieved successfully',
-            data: { entries, customer },
+            data: { orders, customer },
         });
     } catch (error) {
         console.error(error);

@@ -37,8 +37,8 @@ exports.createPaymentIntent = async (req, res) => {
       ],
       mode: "payment",
       success_url:
-        "http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: "http://localhost:3000/cancel",
+        "http://44.196.64.110:2040/success?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: "http://44.196.64.110:2040/cancel",
       metadata: {
         totalPrice: checkoutData.totalPrice,
         totalProducts: checkoutData.totalProducts,

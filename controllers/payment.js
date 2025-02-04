@@ -38,8 +38,20 @@ exports.createPaymentIntent = async (req, res) => {
         totalProducts: checkoutData.totalProducts,
       },
     });
+    const transaction = new Transaction({
+      userId: checkoutData.userId,
+      order_id: checkoutData.order_id,
+      amount: session.amount_total / 100, // Convert from paise to INR
+      quantity: parseInt(session.metadata.totalProducts),
+      currency: session.currency,
+      paymentId: session.id,
+      status: session.payment_status,
+    });
 
-    res.json({ sessionId: session.id }); // Ensure only session.id is sent
+    await transaction.save();
+
+
+    res.json({ sessionId: session }); // Ensure only session.id is sent
   } catch (error) {
     console.error("Payment Processing Error:", error.message);
     res.status(500).json({ error: error.message });
@@ -49,57 +61,57 @@ exports.createPaymentIntent = async (req, res) => {
 
 
 
-// const Stripe = require("stripe");
-// const Transaction = require("../models/TransactionModel");
-const express = require("express");
+// // const Stripe = require("stripe");
+// // const Transaction = require("../models/TransactionModel");
+// const express = require("express");
 
-// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+// // const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-exports.stripeWebhook = async (req, res) => {
-  const sig = req.headers["stripe-signature"];
-  let event;
+// exports.stripeWebhook = async (req, res) => {
+//   const sig = req.headers["stripe-signature"];
+//   let event;
 
-  try {
-    // Construct event from request body
-    event = stripe.webhooks.constructEvent(req.rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);
-    console.log("✅ Webhook event received:", event.type);
-  } catch (err) {
-    console.error("⚠️ Webhook signature verification failed.", err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
+//   try {
+//     // Construct event from request body
+//     event = stripe.webhooks.constructEvent(req.rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);
+//     console.log("✅ Webhook event received:", event.type);
+//   } catch (err) {
+//     console.error("⚠️ Webhook signature verification failed.", err.message);
+//     return res.status(400).send(`Webhook Error: ${err.message}`);
+//   }
 
-  // Handle the event type
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object;
+//   // Handle the event type
+//   if (event.type === "checkout.session.completed") {
+//     const session = event.data.object;
 
-    console.log("✅ Checkout Session Completed:", session);
+//     console.log("✅ Checkout Session Completed:", session);
 
-    if (!session.metadata || !session.metadata.userId || !session.metadata.order_id) {
-      console.error("❌ Metadata missing from session:", session.metadata);
-      return res.status(400).json({ error: "Missing metadata in session" });
-    }
+//     if (!session.metadata || !session.metadata.userId || !session.metadata.order_id) {
+//       console.error("❌ Metadata missing from session:", session.metadata);
+//       return res.status(400).json({ error: "Missing metadata in session" });
+//     }
 
-    try {
-      const transaction = new Transaction({
-        userId: session.metadata.userId,
-        order_id: session.metadata.order_id,
-        amount: session.amount_total / 100, // Convert from paise to INR
-        quantity: parseInt(session.metadata.totalProducts),
-        currency: session.currency,
-        paymentId: session.id,
-        status: session.payment_status,
-      });
+//     try {
+//       const transaction = new Transaction({
+//         userId: session.metadata.userId,
+//         order_id: session.metadata.order_id,
+//         amount: session.amount_total / 100, // Convert from paise to INR
+//         quantity: parseInt(session.metadata.totalProducts),
+//         currency: session.currency,
+//         paymentId: session.id,
+//         status: session.payment_status,
+//       });
 
-      await transaction.save();
-      console.log("✅ Transaction Saved:", transaction);
-    } catch (err) {
-      console.error("❌ Error saving transaction:", err);
-      return res.status(500).json({ error: "Failed to save transaction" });
-    }
-  }
+//       await transaction.save();
+//       console.log("✅ Transaction Saved:", transaction);
+//     } catch (err) {
+//       console.error("❌ Error saving transaction:", err);
+//       return res.status(500).json({ error: "Failed to save transaction" });
+//     }
+//   }
 
-  res.json({ received: true });
-};
+//   res.json({ received: true });
+// };
 
 
 

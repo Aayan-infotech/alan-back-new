@@ -1,4 +1,5 @@
 const Appointment = require('../models/appointmentModel');
+const Transaction = require('../models/TransactionModel');
 
 const createAppointment = async (req, res) => {
     try {
@@ -41,14 +42,14 @@ const getAppointments = async (req, res) => {
             statusCode: 200,
             status: "success",
             data: appointments,
-          });
+        });
     } catch (error) {
         console.error(error);
     }
 }
 
 const getAppointmentsById = async (req, res) => {
-    try{
+    try {
         const { id } = req.params;
         const appointmentData = await Appointment.findById(id);
         res.status(200).json({
@@ -56,13 +57,13 @@ const getAppointmentsById = async (req, res) => {
             status: "success",
             data: appointmentData
         })
-    }catch(error){
+    } catch (error) {
         console.error(error);
     }
 }
 
 const deleteAppointment = async (req, res) => {
-    try{
+    try {
         const { id } = req.params;
         const details = await Appointment.findByIdAndDelete(id);
         res.status(200).json({
@@ -70,14 +71,51 @@ const deleteAppointment = async (req, res) => {
             status: "success",
             data: details
         });
-    }catch(error){
+    } catch (error) {
         console.error(error);
     }
 }
+
+const getSalesData = async (req, res) => {
+    try {
+        let { filter } = req.query;
+        let startDate;
+
+        const today = new Date();
+
+        if (filter === '2months') {
+            startDate = new Date();
+            startDate.setMonth(today.getMonth() - 2);
+        } else {
+            startDate = new Date();
+            startDate.setDate(today.getDate() - 15);
+        }
+
+        const salesData = await Transaction.aggregate([
+            {
+                $match: {
+                    createdAt: { $gte: startDate, $lte: today }
+                }
+            },
+            {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                    totalSales: { $sum: "$amount" }
+                }
+            },
+            { $sort: { _id: 1 } }
+        ]);
+
+        res.status(200).json({ success: true, data: salesData });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
 
 module.exports = {
     createAppointment,
     getAppointments,
     getAppointmentsById,
-    deleteAppointment
+    deleteAppointment,
+    getSalesData
 }

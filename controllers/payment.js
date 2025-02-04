@@ -51,7 +51,7 @@ exports.createPaymentIntent = async (req, res) => {
     await transaction.save();
 
 
-    res.json({ sessionId: session.id }); // Ensure only session.id is sent
+    res.json({ sessionId: session.id, session: session });    // Ensure only session.id is sent
   } catch (error) {
     console.error("Payment Processing Error:", error.message);
     res.status(500).json({ error: error.message });

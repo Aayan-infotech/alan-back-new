@@ -43,6 +43,11 @@ const FinalOrderSchema = new mongoose.Schema({
         
         required: true 
     },
+    orderStatus: { 
+        type: String, 
+        required: true,
+        default: 'pending'
+    },
     payment_source: { type: Object },
     
     customerDetails: {

@@ -112,7 +112,7 @@
 // const Transaction = require('../models/TransactionModel');
 // const CustomerManage = require('../models/CustMngModel');
 // const Order = require('../models/OrderModel');
-const FinalOrder = require('../models/FinalOrder');
+const FinalOrder = require('../models/FinalOrderModel');
 const paypal = require('@paypal/checkout-server-sdk');
 const Transaction = require('../models/TransactionModel');
 const CustomerManage = require('../models/CustMngModel');

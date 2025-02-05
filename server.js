@@ -61,6 +61,8 @@ const transactionRoutes=require('./routes/transactionRoutes')
 const WishlistRoutes=require('./routes/WishlistRoutes')
 const GMCardsRoutes=require('./routes/GMCardsRoutes')
 const paymentRoutes = require('./routes/paymentRoutes');
+const getAllCustData = require('./routes/FinalOrderRoutes');
+
 
 
 app.use('/api', adminUserManageRoutes);
@@ -88,6 +90,8 @@ app.use('/api/transaction',transactionRoutes)
 app.use('/api/wishlist',WishlistRoutes)
 app.use('/api/GMCards',GMCardsRoutes)
 app.use('/api/payment', paymentRoutes);
+app.use('/api/FnalCustData', getAllCustData);
+
 
            
 

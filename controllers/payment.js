@@ -1,6 +1,6 @@
 const Stripe = require("stripe");
 const Transaction = require("../models/TransactionModel");
-const FinalOrder = require('../models/FinalOrder');
+const FinalOrder = require('../models/FinalOrderModel');
 const CustomerManage = require('../models/CustMngModel');
 const Order = require('../models/OrderModel');
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);

@@ -11,8 +11,14 @@ const dimsColorSchema = new mongoose.Schema({
         required: true,
     },
     value: {
-        type: mongoose.Schema.Types.Mixed, // This will allow both numbers and percentage strings
-        required: true,
+        type: mongoose.Schema.Types.Mixed, 
+        required: false,
+        default: null,
+    },
+    amount: {
+        type: Number,
+        required: false,
+        default: null
     }
 
 });

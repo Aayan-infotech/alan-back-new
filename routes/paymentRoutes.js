@@ -1,7 +1,8 @@
 const express = require('express');
-const { createPaymentIntent } = require('../controllers/payment');
+const { createPaymentIntent, getDataFromPaymentIntent } = require('../controllers/payment');
 const router = express.Router();
+const { verifyToken } = require('../middlewares/verifyToken');
 
 router.post('/create-payment-intent', createPaymentIntent);
-// router.post("/webhook", stripeWebhook);
+router.get('/payment-details/:paymentIntentId',verifyToken, getDataFromPaymentIntent)
 module.exports = router;

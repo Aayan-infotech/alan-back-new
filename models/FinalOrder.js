@@ -44,11 +44,7 @@ const FinalOrderSchema = new mongoose.Schema({
         required: true 
     },
     payment_source: { type: Object },
-    payer: {
-        name: { type: String },
-        email: { type: String },
-        payer_id: { type: String },
-    },
+    
     customerDetails: {
         name: { type: String },
         email: { type: String },
@@ -61,3 +57,12 @@ const FinalOrderSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = mongoose.model('FinalOrder', FinalOrderSchema);
+
+
+
+
+    // payer: {
+    //     name: { type: String },
+    //     email: { type: String },
+    //     payer_id: { type: String },
+    // },

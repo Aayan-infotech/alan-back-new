@@ -58,99 +58,99 @@ exports.createPaymentIntent = async (req, res) => {
 };
 
 // get all payment data and addres oder Detales
-exports.getDataFromPaymentIntent = async (req, res) => {
-  try {
-    const { paymentIntentId } = req.params;
-    const userId = req.userId; // Extracted from verifyToken middleware
+// exports.getDataFromPaymentIntent = async (req, res) => {
+//   try {
+//     const { paymentIntentId } = req.params;
+//     const userId = req.userId; // Extracted from verifyToken middleware
 
-    if (!paymentIntentId) {
-      return res.status(400).json({
-        success: false,
-        status: 400,
-        message: "Payment intent id is required!"
-      });
-    }
+//     if (!paymentIntentId) {
+//       return res.status(400).json({
+//         success: false,
+//         status: 400,
+//         message: "Payment intent id is required!"
+//       });
+//     }
 
-    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+//     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
-    if (!paymentIntent) {
-      return res.status(400).json({
-        success: false,
-        status: 400,
-        message: "Payment intent fetch failed!"
-      });
-    }
+//     if (!paymentIntent) {
+//       return res.status(400).json({
+//         success: false,
+//         status: 400,
+//         message: "Payment intent fetch failed!"
+//       });
+//     }
 
-    // Fetch all orders for the given userId 
-    const orders = await Order.find({ user_id: userId });
-    if (!orders.length) {
-      return res.status(404).json({
-        success: false,
-        message: "No orders found!"
-      });
-    }
+//     // Fetch all orders for the given userId 
+//     const orders = await Order.find({ user_id: userId });
+//     if (!orders.length) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "No orders found!"
+//       });
+//     }
 
-    const finalOrders = [];
+//     const finalOrders = [];
 
-    for (const order of orders) {
-      // Fetch Customer Details
-      const customerData = await CustomerManage.findOne({ _id: order.user_id });
-      if (!customerData) {
-        return res.status(404).json({
-          success: false,
-          message: "Customer details not found!"
-        });
-      }
+//     for (const order of orders) {
+//       // Fetch Customer Details
+//       const customerData = await CustomerManage.findOne({ _id: order.user_id });
+//       if (!customerData) {
+//         return res.status(404).json({
+//           success: false,
+//           message: "Customer details not found!"
+//         });
+//       }
 
-      // Create Final Order Entry
-      const finalOrder = new FinalOrder({
-        userId: userId,
-        order_id: order._id,
-        orderData: {
-          product_name: order.name,
-          product_sku: order.sku,
-          product_price: order.product_price,
-          total_price: order.totalPrice,
-          selected_options: order.selectedOptions,
-        },
-        status: paymentIntent.status,
-        paymentId: paymentIntent.id,
-        quantity: 1, // Assuming 1 product per order, modify if needed
-        amount: paymentIntent.amount / 100,
-        payment_source: paymentIntent.payment_method,
-        customerDetails: {
-          name: customerData.name,
-          email: customerData.email,
-          mobile: customerData.mobile,
-          address: customerData.address,
-          state: customerData.state,
-          zipCode: customerData.zipCode,
-          country_name: customerData.country_name,
-        },
-      });
+//       // Create Final Order Entry
+//       const finalOrder = new FinalOrder({
+//         userId: userId,
+//         order_id: order._id,
+//         orderData: {
+//           product_name: order.name,
+//           product_sku: order.sku,
+//           product_price: order.product_price,
+//           total_price: order.totalPrice,
+//           selected_options: order.selectedOptions,
+//         },
+//         status: paymentIntent.status,
+//         paymentId: paymentIntent.id,
+//         quantity: 1, // Assuming 1 product per order, modify if needed
+//         amount: paymentIntent.amount / 100,
+//         payment_source: paymentIntent.payment_method,
+//         customerDetails: {
+//           name: customerData.name,
+//           email: customerData.email,
+//           mobile: customerData.mobile,
+//           address: customerData.address,
+//           state: customerData.state,
+//           zipCode: customerData.zipCode,
+//           country_name: customerData.country_name,
+//         },
+//       });
 
-      await finalOrder.save();
-      finalOrders.push(finalOrder);
-    }
+//       await finalOrder.save();
+//       finalOrders.push(finalOrder);
+//     }
 
-    res.status(200).json({
-      success: true,
-      paymentId: paymentIntent.id,
-      status: paymentIntent.status,
-      amountPaid: paymentIntent.amount / 100,
-      currency: paymentIntent.currency,
-      finalOrders
-    });
-  } catch (error) {
-    console.log("Error fetching payment intent id:", error.message);
-    return res.status(500).json({
-      success: false,
-      status: 500,
-      message: "Internal server error",
-      error: error.message
-    });
-  }
-};
+//     res.status(200).json({
+//       success: true,
+//       paymentId: paymentIntent.id,
+//       status: paymentIntent.status,
+//       amountPaid: paymentIntent.amount / 100,
+//       currency: paymentIntent.currency,
+//       finalOrders
+//     });
+//   } catch (error) {
+//     console.log("Error fetching payment intent id:", error.message);
+//     return res.status(500).json({
+//       success: false,
+//       status: 500,
+//       message: "Internal server error",
+//       error: error.message
+//     });
+//   }
+// };
 
 
 // const stripeSecretKey =
@@ -238,3 +238,134 @@ exports.getDataFromPaymentIntent = async (req, res) => {
 //     });
 //   }
 // }
+
+
+
+// complete payment
+// exports.completePayment = async (req, res) => {
+//   try {
+//     const [session, lineItems] = await Promise.all([
+//       stripe.checkout.sessions.retrieve(req.params.session_id, { expand: ['payment_intent.payment_method'] }),
+//       stripe.checkout.sessions.listLineItems(req.params.session_id)
+//     ]);
+//     console.log(JSON.stringify(await session));
+//     res.status(200).json({
+//       success: true,
+//       status: 200,
+//       message: "Payment completed successfully!",
+//       data: session
+//     });
+//   }
+//   catch (error) {
+//     console.log("Error in completing the payment:", error.message);
+//     return res.status(500).json({
+//       success: false,
+//       status: 500,
+//       message: "Internal server error!",
+//       error: error.message
+//     });
+//   }
+// }
+
+
+
+
+exports.completePayment = async (req, res) => {
+  try {
+    const [session, lineItems] = await Promise.all([
+      stripe.checkout.sessions.retrieve(req.params.session_id, { expand: ['payment_intent.payment_method'] }),
+      stripe.checkout.sessions.listLineItems(req.params.session_id)
+    ]);
+
+    if (!session || session.payment_status !== "paid") {
+      return res.status(400).json({
+        success: false,
+        message: "Payment not successful!",
+      });
+    }
+
+    // Extract necessary details from Stripe session
+    const { userId, order_id, totalPrice, totalProducts } = session.metadata;
+    const paymentIntent = session.payment_intent;
+
+    // Step 1: Fetch all orders for userId
+    const orders = await Order.find({ user_id: userId });
+    if (!orders.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No orders found!",
+      });
+    }
+
+    const finalOrders = [];
+
+    // Step 2 & 3: Process each order and remove from OrderModel
+    for (const order of orders) {
+      // Fetch Customer Details
+      const customerData = await CustomerManage.findOne({ _id: order.user_id });
+      if (!customerData) {
+        return res.status(404).json({
+          success: false,
+          message: "Customer details not found!",
+        });
+      }
+
+      // Create Final Order Entry
+      const finalOrder = new FinalOrder({
+        userId: userId,
+        order_id: order._id,
+        orderData: {
+          product_name: order.product_name || "Unknown",
+          product_sku: order.product_sku || "Unknown",
+          product_price: order.product_price || 0,
+          total_price: order.totalPrice,
+          selected_options: order.selectedOptions,
+        },
+        status: paymentIntent.status,
+        paymentId: paymentIntent.id,
+        quantity: totalProducts,
+        amount: paymentIntent.amount / 100,
+        payment_source: paymentIntent.payment_method,
+        customerDetails: {
+          name: customerData.name,
+          email: customerData.email,
+          mobile: customerData.mobile,
+          address: customerData.address,
+          state: customerData.state,
+          zipCode: customerData.zipCode,
+          country_name: customerData.country_name,
+        },
+        payer: {
+          card: {
+            brand: paymentIntent.payment_method.card.brand,
+            number: "**** **** **** " + paymentIntent.payment_method.card.last4,
+          },
+          email: session.customer_details.email,
+          name: session.customer_details.name,
+          phone: session.customer_details.phone,
+        },
+      });
+
+      await finalOrder.save();
+      finalOrders.push(finalOrder);
+
+      // **Delete order from OrderModel**
+      await Order.findByIdAndDelete(order._id);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Payment completed successfully! Orders moved to FinalOrder and removed from OrderModel.",
+      orders: finalOrders,
+    });
+
+  } catch (error) {
+    console.error("Error in completing the payment:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: error.message,
+    });
+  }
+};
+

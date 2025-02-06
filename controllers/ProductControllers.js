@@ -232,3 +232,31 @@ exports.searchProduct = async (req, res) => {
       });
   }
 };
+
+// getProductsbyid
+exports.getProductsbyid = async (req, res) => { 
+  try {
+      // Extract the product ID from the request params
+      const productId = req.params.id;
+
+      // Check if the productId is provided
+      if (!productId) {
+          return res.status(400).json({ message: "Product ID is required" });
+      }
+
+      // Find the product by ID in the database
+      const product = await Product.findById(productId);
+
+      // If product not found, send a 404 response
+      if (!product) {
+          return res.status(404).json({ message: "Product not found" });
+      }
+
+      // Send a successful response with the product data
+      return res.status(200).json(product);
+  } catch (err) {
+      // Handle any errors that may occur
+      console.error(err);
+      return res.status(500).json({ message: "Server error" });
+  }
+};

@@ -27,8 +27,10 @@ exports.createPaymentIntent = async (req, res) => {
           quantity: 1,
         },
       ],
+      // success_url: `${process.env.ROUTE_BASE_URL}/thanku?session_id={CHECKOUT_SESSION_ID}`,
+      // cancel_url: `${process.env.ROUTE_BASE_URL}/cancel`,
       mode: "payment",
-      success_url: `http://44.196.64.110:2040/successfull`,
+      success_url: `http://44.196.64.110:2040/successfull?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: "http://44.196.64.110:2040/cancel",
       metadata: {
         userId: checkoutData.userId,
@@ -315,8 +317,8 @@ exports.completePayment = async (req, res) => {
         userId: userId,
         order_id: order._id,
         orderData: {
-          product_name: order.product_name || "Unknown",
-          product_sku: order.product_sku || "Unknown",
+          product_name: order.name || "Unknown",
+          product_sku: order.sku || "Unknown",
           product_price: order.product_price || 0,
           total_price: order.totalPrice,
           selected_options: order.selectedOptions,
@@ -353,7 +355,7 @@ exports.completePayment = async (req, res) => {
       await Order.findByIdAndDelete(order._id);
     }
 
-    res.status(200).json({
+    res.status(200).json({ 
       success: true,
       message: "Payment completed successfully! Orders moved to FinalOrder and removed from OrderModel.",
       orders: finalOrders,

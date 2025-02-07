@@ -465,7 +465,7 @@ exports.completePayment = async (req, res) => {
       finalOrders.push(finalOrder);
 
       // Uncomment in production to delete processed orders
-      // await Order.findByIdAndDelete(order._id);
+      await Order.findByIdAndDelete(order._id);
     }
 
     res.status(200).json({ 

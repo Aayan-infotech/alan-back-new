@@ -1,6 +1,42 @@
 const express = require('express');
 const FinalOrder = require('../models/FinalOrderModel');
 
+exports.getOrdersByUserId = async (req, res) => {
+    try {
+        const userId = req.userId; // Extracted from verifyToken middleware
+
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required' });
+        }
+
+        const orders = await FinalOrder.find({ userId });
+
+        if (!orders.length) {
+            return res.status(404).json({
+                status: 404,
+                success: false,
+                message: 'No orders found for this user',
+                data: []
+            });
+        }
+
+        res.status(200).json({
+            status: 200,
+            success: true,
+            data: orders
+        });
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        res.status(500).json({
+            status: 500,
+            success: false,
+            message: 'Server Error',
+            data: []
+        });
+    }
+};
+
+
 // Get All Orders
 exports.getAllCustData = async (req, res) => {
     try {

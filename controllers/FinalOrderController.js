@@ -1,6 +1,8 @@
 const express = require('express');
 const FinalOrder = require('../models/FinalOrderModel');
+const mongoose = require('mongoose');
 
+//wab api 
 exports.getOrdersByUserId = async (req, res) => {
     try {
         const userId = req.userId; // Extracted from verifyToken middleware
@@ -45,6 +47,7 @@ exports.getAllCustData = async (req, res) => {
 
         // Map the necessary fields
         const orderDetails = orders.map(order => ({
+            id: order._id,
             order_id: order.order_id,
             productName: order.orderData.product_name, // Product name
             product_price: order.orderData.product_price, // Product price
@@ -74,5 +77,30 @@ exports.getAllCustData = async (req, res) => {
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Error retrieving orders', error: error.message });
+    }
+};
+
+
+exports.editFinalOrder = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updateData = req.body;
+
+        // Validate ObjectId
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Invalid Order ID' });
+        }
+
+        // Find and update the FinalOrder by _id
+        const updatedOrder = await FinalOrder.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
+
+        if (!updatedOrder) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        res.status(200).json({ message: 'Order updated successfully', data: updatedOrder });
+    } catch (error) {
+        console.error('Error updating order:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 };

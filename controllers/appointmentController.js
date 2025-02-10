@@ -1,5 +1,5 @@
 const Appointment = require('../models/appointmentModel');
-const Transaction = require('../models/TransactionModel');
+const Transaction = require('../models/FinalOrderModel');
 
 const createAppointment = async (req, res) => {
     try {

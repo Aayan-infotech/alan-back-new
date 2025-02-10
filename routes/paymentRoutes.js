@@ -4,5 +4,5 @@ const router = express.Router();
 const { verifyToken } = require('../middlewares/verifyToken');
 
 router.post('/create-payment-intent', createPaymentIntent);
-router.get('/completePayment/:session_id', verifyToken, completePayment);
+router.get('/completePayment', verifyToken, completePayment);
 module.exports = router;

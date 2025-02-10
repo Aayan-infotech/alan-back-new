@@ -102,62 +102,7 @@ exports.createDimsColorGardenwindow = async (req, res) => {
 
 
 // plz only Garden Window
-// exports.updateAmount = async (req, res) => {
-//     try {
-//         const { productId, widthHeight, amount } = req.body;
 
-//         if (!productId || !widthHeight || !amount) {
-//             return res.status(400).json({ message: "Missing required fields" });
-//         }
-
-//         // Finding the matching document in MongoDB
-//         const existingRecord = await DimsColor.findOne({
-//             Product_id: productId,
-//             Color: { $regex: widthHeight.replace(/\d+/g, '\\d+'), $options: 'i' } // Matching format
-//         });
-
-//         if (!existingRecord) {
-//             return res.status(404).json({ message: "No matching record found" });
-//         }
-
-//         // Updating the amount
-//         existingRecord.amount += amount;
-//         await existingRecord.save();
-
-//         res.status(200).json({ message: "Amount updated successfully", updatedRecord: existingRecord });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: "Internal server error" });
-//     }
-// };
-
-// exports.updateAmount = async (req, res) => {
-//     try {
-//         const { productId, widthHeight, amount } = req.body;
-
-//         if (!productId || !widthHeight || !amount) {
-//             return res.status(400).json({ message: "Missing required fields" });
-//         }
-
-//         // Finding the matching document in MongoDB
-//         const existingRecord = await DimsColor.findOne({
-//             Product_id: productId,
-//             Color: { $regex: widthHeight.replace(/\d+/g, '\\d+'), $options: 'i' } // Matching format
-//         });
-
-//         if (!existingRecord) {
-//             return res.status(404).json({ message: "No matching record found" });
-//         }
-
-//         // Calculating the new amount without saving
-//         const newAmount = existingRecord.amount + amount;
-
-//         res.status(200).json({ message: "Calculated amount", updatedAmount: newAmount });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: "Internal server error" });
-//     }
-// };
 
 const staticDims = [
     { Color: "Almond", Size: "36\" x 36\"", amount: 130.50 },

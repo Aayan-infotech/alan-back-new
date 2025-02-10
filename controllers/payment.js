@@ -162,8 +162,8 @@ exports.completePayment = async (req, res) => {
   try {
     // Fetch session and line items from Stripe
     const [session, lineItems] = await Promise.all([
-      stripe.checkout.sessions.retrieve(req.params.session_id, { expand: ['payment_intent.payment_method'] }),
-      stripe.checkout.sessions.listLineItems(req.params.session_id)
+      stripe.checkout.sessions.retrieve(req.query.session_id, { expand: ['payment_intent.payment_method'] }),
+      stripe.checkout.sessions.listLineItems(req.query.session_id)
     ]);
 
     if (!session || session.payment_status !== "paid") {

@@ -5,6 +5,7 @@ const {
     getDimsColor,
     deleteDimsColor,
     createDimsColorGardenwindow,
+    updateAmount
 } = require('../controllers/dimsColorController');
 
 // Route for POST request to create a new dimsColor
@@ -17,5 +18,7 @@ router.get('/', getDimsColor);
 router.delete('/:id', deleteDimsColor);
 
 router.post('/createDimsColorGardenwindow', createDimsColorGardenwindow); // only use Gardenwindow
+router.put('/updateAmount', updateAmount);
+
 
 module.exports = router;

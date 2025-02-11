@@ -318,21 +318,84 @@ const staticDimsWh = [
 // };
 
 
+// exports.updateAmount = async (req, res) => {
+//     try {
+//         const { Color, widthHeight, amount } = req.body;
+
+//         // Find matching entry in staticDimsColor
+//         const colorMatch = staticDimsColor.find(
+//             (item) => item.Color === Color && item.Size === widthHeight
+//         );
+
+//         // Find matching entry in staticDimsWh
+//         const whMatch = staticDimsWh.find(
+//             (item) => item.widthHeight === widthHeight
+//         );
+
+//         if (!colorMatch || !whMatch) {
+//             return res.status(404).json({
+//                 status: 404,
+//                 success: false,
+//                 message: "No matching data found",
+//                 data: null
+//             });
+//         }
+
+//         let totalAmount = amount;
+//         let colorAmount = colorMatch.amount;
+//         let whAmount = whMatch.amount;
+
+//         if (Color === "White") {
+//             totalAmount += whAmount;
+//         } else {
+//             totalAmount += colorAmount + whAmount;
+//         }
+
+//         return res.status(200).json({
+//             status: 200,
+//             success: true,
+//             message: "Amount calculated successfully",
+//             data: {
+//                 Color,
+//                 Size: widthHeight,
+//                 amount,
+//                 colorAmount,
+//                 whAmount,
+//                 totalAmount
+//             }
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({
+//             status: 500,
+//             success: false,
+//             message: "Server Error",
+//             data: null
+//         });
+//     }
+// };
+
+
+
+
 exports.updateAmount = async (req, res) => {
     try {
         const { Color, widthHeight, amount } = req.body;
 
-        // Find matching entry in staticDimsColor
-        const colorMatch = staticDimsColor.find(
-            (item) => item.Color === Color && item.Size === widthHeight
-        );
+        // Find matching entry in staticDimsColor (except when Color is "White")
+        let colorMatch = null;
+        if (Color !== "White") {
+            colorMatch = staticDimsColor.find(
+                (item) => item.Color === Color && item.Size === widthHeight
+            );
+        }
 
         // Find matching entry in staticDimsWh
         const whMatch = staticDimsWh.find(
             (item) => item.widthHeight === widthHeight
         );
 
-        if (!colorMatch || !whMatch) {
+        if ((!colorMatch && Color !== "White") || !whMatch) {
             return res.status(404).json({
                 status: 404,
                 success: false,
@@ -342,11 +405,13 @@ exports.updateAmount = async (req, res) => {
         }
 
         let totalAmount = amount;
-        let colorAmount = colorMatch.amount;
+        let colorAmount = colorMatch ? colorMatch.amount : 0; // Only add if Color is NOT "White"
         let whAmount = whMatch.amount;
 
+        // If color is "White", do not add colorAmount
         if (Color === "White") {
             totalAmount += whAmount;
+            colorAmount = 0; // Explicitly set to 0 to avoid confusion
         } else {
             totalAmount += colorAmount + whAmount;
         }
@@ -374,4 +439,3 @@ exports.updateAmount = async (req, res) => {
         });
     }
 };
-

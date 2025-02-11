@@ -147,6 +147,8 @@ const staticDims = [
     { Color: "Tan", Size: "72\" x 60\"", amount: 208.50 }
 ];
 
+let updatedRecords = new Set();  // Track updated records by a unique identifier (Color + Size)
+
 exports.updateAmount = async (req, res) => {
     try {
         const { Color, widthHeight, amount } = req.body;
@@ -157,6 +159,7 @@ exports.updateAmount = async (req, res) => {
 
         // If Color is "White", return the same amount without modification
         if (Color.toLowerCase() === "white") {
+            // console.log("No changes made for White color, returning amount:", amount);  // Debugging
             return res.status(200).json({ message: "No changes made", amount });
         }
 
@@ -167,12 +170,40 @@ exports.updateAmount = async (req, res) => {
             return res.status(404).json({ message: "No matching record found" });
         }
 
-        // Updating the amount
+        // Debugging: Log the existing record and amount
+        // console.log("Existing record before update:", existingRecord);
+        // console.log("Amount to be added:", amount);
+
+        const recordIdentifier = `${Color}-${widthHeight}`;
+
+        // Check if the record has already been updated
+        if (updatedRecords.has(recordIdentifier)) {
+            // console.log(`Record ${recordIdentifier} has already been updated. Skipping further updates.`);
+            return res.status(200).json({
+                message: "Record has already been updated previously",
+                updatedRecord: existingRecord
+            });
+        }
+
+        // Prevent adding the amount again if it's already updated
         existingRecord.amount += amount;
 
-        res.status(200).json({ message: "Amount updated successfully", updatedRecord: existingRecord });
+        // Mark this record as updated
+        updatedRecords.add(recordIdentifier);
+
+        // Debugging: Log the updated record
+        // console.log("Existing record after update:", existingRecord);
+
+        // Return the updated record
+        res.status(200).json({
+            message: "Amount updated successfully",
+            updatedRecord: existingRecord
+        });
     } catch (error) {
-        console.error(error);
+        console.error("Error occurred:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+
+

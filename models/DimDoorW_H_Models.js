@@ -16,7 +16,7 @@ const DimDoorWidthHeightSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    price: {
+    amount: {
         type: Number,
         required: true,
         min: 0, // Ensuring price is non-negative

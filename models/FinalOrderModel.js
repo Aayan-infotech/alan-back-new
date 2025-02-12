@@ -40,7 +40,7 @@
 //         },
 //     amount: { 
 //         type: Number,
-        
+
 //         required: true 
 //     },
 //     orderStatus: { 
@@ -49,7 +49,7 @@
 //         default: 'pending'
 //     },
 //     payment_source: { type: Object },
-    
+
 //     customerDetails: {
 //         name: { type: String },
 //         email: { type: String },
@@ -66,63 +66,63 @@
 
 
 
-    // payer: {
-    //     name: { type: String },
-    //     email: { type: String },
-    //     payer_id: { type: String },
-    // },
- 
-    const mongoose = require('mongoose');
+// payer: {
+//     name: { type: String },
+//     email: { type: String },
+//     payer_id: { type: String },
+// },
+
+const mongoose = require('mongoose');
 
 const FinalOrderSchema = new mongoose.Schema({
-    userId: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        required: true, ref: 'User' 
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true, ref: 'User'
     },
-    order_id: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        required: true, ref: 'Order' 
+    order_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true, ref: 'Order'
     },
     orderData: {
-        product_name: { 
-            type: String 
+        product_name: {
+            type: String
         },
-        product_sku: { 
-            type: String 
+        product_sku: {
+            type: String
         },
-        product_price: { 
-            type: Number 
+        product_price: {
+            type: Number
         },
-        total_price: { 
-            type: Number 
+        total_price: {
+            type: Number
         },
-        selected_options: { 
-            type: Object 
+        selected_options: {
+            type: Object
         },
     },
-    status: { 
-        type: String, 
-        required: true 
+    status: {
+        type: String,
+        required: true
     },
     paymentId: {
-         type: String, 
-         required: true 
+        type: String,
+        required: true
     },
     quantity: {
-         type: Number, 
-         required: true 
-    },
-    amount: { 
         type: Number,
-        required: true 
+        required: true
     },
-    orderStatus: { 
-        type: String, 
+    amount: {
+        type: Number,
+        required: true
+    },
+    orderStatus: {
+        type: String,
         required: true,
         default: 'pending'
     },
     payment_source: { type: Object },
-    
+
     customerDetails: {
         name: { type: String },
         email: { type: String },

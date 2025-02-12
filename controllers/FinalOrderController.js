@@ -104,3 +104,43 @@ exports.editFinalOrder = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
+// OrderTracking
+exports.trackOrder = async (req, res) => {
+    try {
+        const { order_id } = req.params; // Get order_id from request params
+
+        if (!order_id) {
+            return res.status(400).json({
+                success: false,
+                message: 'Order ID is required'
+            });
+        }
+
+        // Find the order by order_id
+        const order = await FinalOrder.findOne({ order_id });
+
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: 'Order not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Order details retrieved successfully',
+            data: {
+                userId: order.userId,
+                order_id: order.order_id,
+                orderStatus: order.orderStatus
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Server Error',
+            error: error.message
+        });
+    }
+};

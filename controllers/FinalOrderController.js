@@ -133,6 +133,7 @@ exports.trackOrder = async (req, res) => {
             data: {
                 userId: order.userId,
                 order_id: order.order_id,
+                date: order.createdAt,
                 orderStatus: order.orderStatus
             }
         });

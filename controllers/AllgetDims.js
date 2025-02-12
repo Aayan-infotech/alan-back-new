@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const dimsModels = {
+    DimDoorWidthHeight: require('../models/DimDoorW_H_Models'),
     widthHeight:  require('../models/dimsWHmodel'),
     Grid: require('../models/dimsGridModel'),
     Fin: require('../models/dimsFinModel'),
@@ -106,7 +107,11 @@ exports.getAllDimsByProductId = async (req, res) => {
 
         // Iterate over each model and fetch dimensions with matching Product_id
         for (let model in dimsModels) {
-            const data = await dimsModels[model].find({ Product_id });
+            // const data = await dimsModels[model].find({ Product_id });
+            const data = await dimsModels[model].find({ 
+                $or: [{ Product_id }, { productId: Product_id }] 
+            });
+            
             if (data.length > 0) {
                 dimensionsData[model] = data; // Include only non-empty arrays
             }

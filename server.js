@@ -72,6 +72,8 @@ const WishlistRoutes = require("./routes/WishlistRoutes");
 const GMCardsRoutes = require("./routes/GMCardsRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const getAllCustData = require("./routes/FinalOrderRoutes");
+const DimDoorW_H_Routes = require("./routes/DimDoorW_H_Routes");
+
 
 app.use("/api", adminUserManageRoutes);
 app.use("/api/appointments", AppointmentRoutes);
@@ -99,6 +101,8 @@ app.use("/api/wishlist", WishlistRoutes);
 app.use("/api/GMCards", GMCardsRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/FnalCustData", getAllCustData);
+app.use("/api/DimDoorW_H", DimDoorW_H_Routes);
+
 
 // Start Server
 app.listen(PORT, () => {

@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 // POST request: Create a new DimDoorWidthHeight entry
 exports.createDimDoorWidthHeight = async (req, res) => {
     try {
-        const { productId, widthHeight, value, price } = req.body;
-        const newEntry = new DimDoorWidthHeight({ productId, widthHeight, value, price });
+        const { productId, widthHeight, value, amount } = req.body;
+        const newEntry = new DimDoorWidthHeight({ productId, widthHeight, value, amount });
         await newEntry.save();
         res.status(201).json({ success: true, data: newEntry });
     } catch (error) {

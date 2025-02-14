@@ -6,7 +6,7 @@ const DimDoorLockOptionSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    LockOption: {
+    DoorLockOption: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorLockOptionSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorLockOption', DimDoorLockOptionSchema);
+module.exports = mongoose.model('DoorLockOption', DimDoorLockOptionSchema);

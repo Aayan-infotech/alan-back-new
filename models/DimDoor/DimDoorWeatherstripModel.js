@@ -6,7 +6,7 @@ const DimDoorWeatherstripSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    Weatherstrip: {
+    DoorWeatherstrip: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorWeatherstripSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorWeatherstrip', DimDoorWeatherstripSchema);
+module.exports = mongoose.model('DoorWeatherstrip', DimDoorWeatherstripSchema);

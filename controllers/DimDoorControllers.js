@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const models = {
+    DimDoorFrameWidthHeight: require('../models/DimDoor/DimDoorW_H_Models'),
     DimDoorPreHungOptions: require('../models/DimDoor/DimDoorPreHungModel'),
-    // DimDoorFrameWidthHeight: require('../models/DimDoorFrameWidthHeight'),
     DimDoorPreFinishingOptions: require('../models/DimDoor/DimDoorPreFinishingModel'),
     DimDoorSwingDirection: require('../models/DimDoor/DimDoorSwingDirectionModel'),
     DimDoorFrameOptions: require('../models/DimDoor/DimDoorFrameOptioModel'),
@@ -21,7 +21,7 @@ const models = {
     DimDoorBoreOptions: require('../models/DimDoor/DimDoorBoreOptionsModel'),
     DimDoorInstallationAvailability: require('../models/DimDoor/DimDoorInstallationAvailabilityModel'),
     // DimDoorSpecialInstructions: require('../models/DimDoorSpecialInstructions'),
-    // DimDoorSideWindowOpens: require('../models/')
+    DimDoorSideWindowOpens: require('../models/DimDoor/DimDoorSideWindowOpensModel')
 };
 
 // Generic function to create an entry

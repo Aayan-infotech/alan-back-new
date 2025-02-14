@@ -6,7 +6,7 @@ const DimDoorBoreOptionsSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    BoreOptions: {
+    DoorBoreOptions: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorBoreOptionsSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorBoreOptions', DimDoorBoreOptionsSchema);
+module.exports = mongoose.model('DoorBoreOptions', DimDoorBoreOptionsSchema);

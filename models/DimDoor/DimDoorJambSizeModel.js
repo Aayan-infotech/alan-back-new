@@ -6,7 +6,7 @@ const DimDoorJambSizeSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    JambSize: {
+    DoorJambSize: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorJambSizeSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorJambSize', DimDoorJambSizeSchema);
+module.exports = mongoose.model('DoorJambSize', DimDoorJambSizeSchema);

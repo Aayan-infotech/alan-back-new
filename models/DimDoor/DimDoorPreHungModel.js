@@ -6,7 +6,7 @@ const DimDoorPreHungOptionsSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    PreHungOptions: {
+    DoorPreHungOptions: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorPreHungOptionsSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorPreHungOptions', DimDoorPreHungOptionsSchema);
+module.exports = mongoose.model('DoorPreHungOptions', DimDoorPreHungOptionsSchema);

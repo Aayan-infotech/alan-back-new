@@ -6,7 +6,7 @@ const DimDoorPreFinishingOptionsSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    PreFinishingOptions: {
+    DoorPreFinishingOptions: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorPreFinishingOptionsSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorPreFinishingOptions', DimDoorPreFinishingOptionsSchema);
+module.exports = mongoose.model('DoorPreFinishingOptions', DimDoorPreFinishingOptionsSchema);

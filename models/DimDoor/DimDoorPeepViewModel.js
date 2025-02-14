@@ -6,7 +6,7 @@ const DimDoorPeepViewSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    PeepView: {
+    DoorPeepView: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorPeepViewSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorPeepView', DimDoorPeepViewSchema);
+module.exports = mongoose.model('DoorPeepView', DimDoorPeepViewSchema);

@@ -21,4 +21,4 @@ const DimDoorShoeSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorShoe', DimDoorShoeSchema);
+module.exports = mongoose.model('DoorShoe', DimDoorShoeSchema);

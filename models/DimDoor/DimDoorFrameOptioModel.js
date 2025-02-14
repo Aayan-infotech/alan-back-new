@@ -5,7 +5,7 @@ const DimDoorFrameOptionsSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    FrameOptions: {
+    DoorFrameOptions: {
         type: String,
         required: true,
     },
@@ -20,4 +20,4 @@ const DimDoorFrameOptionsSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorFrameOptions', DimDoorFrameOptionsSchema);
+module.exports = mongoose.model('DoorFrameOptions', DimDoorFrameOptionsSchema);

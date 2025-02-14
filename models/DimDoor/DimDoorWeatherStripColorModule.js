@@ -6,7 +6,7 @@ const DimDoorWeatherStripColorSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    WeatherStripColor: {
+    DoorWeatherStripColor: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorWeatherStripColorSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorWeatherStripColor', DimDoorWeatherStripColorSchema);
+module.exports = mongoose.model('DoorWeatherStripColor', DimDoorWeatherStripColorSchema);

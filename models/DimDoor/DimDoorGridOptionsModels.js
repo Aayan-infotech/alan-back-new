@@ -6,7 +6,7 @@ const DimDoorGridOptionsSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    GridOptions: {
+    DoorGridOptions: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorGridOptionsSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorGridOptions', DimDoorGridOptionsSchema);
+module.exports = mongoose.model('DoorGridOptions', DimDoorGridOptionsSchema);

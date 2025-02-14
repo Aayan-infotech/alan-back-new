@@ -6,7 +6,7 @@ const DimDoorFrameExtrusionSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    FrameExtrusion: {
+    DoorFrameExtrusion: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorFrameExtrusionSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorFrameExtrusion', DimDoorFrameExtrusionSchema);
+module.exports = mongoose.model('DoorFrameExtrusion', DimDoorFrameExtrusionSchema);

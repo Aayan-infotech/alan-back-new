@@ -6,7 +6,7 @@ const DimDoorWidthFrameSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    WidthOfDoorFrame: {
+    DoorWidthFrame: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorWidthFrameSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorWidthFrame', DimDoorWidthFrameSchema);
+module.exports = mongoose.model('DoorWidthFrame', DimDoorWidthFrameSchema);

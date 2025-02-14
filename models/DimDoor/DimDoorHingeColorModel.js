@@ -6,7 +6,7 @@ const DimDoorHingeColorSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    HingeColor: {
+    DoorHingeColor: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorHingeColorSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorHingeColor', DimDoorHingeColorSchema);
+module.exports = mongoose.model('DoorHingeColor', DimDoorHingeColorSchema);

@@ -20,4 +20,4 @@ const DimDoorSwingDirectionSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorSwingDirection', DimDoorSwingDirectionSchema);
+module.exports = mongoose.model('DoorSwingDirection', DimDoorSwingDirectionSchema);

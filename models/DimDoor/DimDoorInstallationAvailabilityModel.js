@@ -6,7 +6,7 @@ const DimDoorInstallationAvailabilitySchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    InstallationAvailability: {
+    DoorInstallationAvailability: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorInstallationAvailabilitySchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorInstallationAvailability', DimDoorInstallationAvailabilitySchema);
+module.exports = mongoose.model('DoorInstallationAvailability', DimDoorInstallationAvailabilitySchema);

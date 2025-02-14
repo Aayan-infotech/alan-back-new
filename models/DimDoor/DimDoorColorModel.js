@@ -6,7 +6,7 @@ const DimDoorColorSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    Color: {
+    DoorColor: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorColorSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorColor', DimDoorColorSchema);
+module.exports = mongoose.model('DoorColor', DimDoorColorSchema);

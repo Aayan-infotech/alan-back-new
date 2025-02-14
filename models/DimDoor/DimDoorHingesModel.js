@@ -6,7 +6,7 @@ const DimDoorHingesSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    Hinges: {
+    DoorHinges: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorHingesSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorHinges', DimDoorHingesSchema);
+module.exports = mongoose.model('DoorHinges', DimDoorHingesSchema);

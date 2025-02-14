@@ -6,7 +6,7 @@ const DimDoorSillSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    Sill: {
+    DoorSill: {
         type: String,
         required: true,
     },
@@ -21,4 +21,4 @@ const DimDoorSillSchema = new mongoose.Schema({
         min: 0,
     }
 }, { timestamps: true });
-module.exports = mongoose.model('DimDoorSill', DimDoorSillSchema);
+module.exports = mongoose.model('DoorSill', DimDoorSillSchema);

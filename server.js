@@ -74,7 +74,7 @@ const paymentRoutes = require("./routes/paymentRoutes");
 const getAllCustData = require("./routes/FinalOrderRoutes");
 const DimDoorW_H_Routes = require("./routes/DimDoorW_H_Routes");
 const searchRoutes = require("./routes/searchRoutes");
-
+const DimDoorRoutes = require("./routes/DimDoorRoutes");
 
 
 app.use("/api", adminUserManageRoutes);
@@ -105,6 +105,7 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/FnalCustData", getAllCustData);
 app.use("/api/DimDoorW_H", DimDoorW_H_Routes);
 app.use("/api/search", searchRoutes);
+app.use("/api/DimDoor", DimDoorRoutes);
 
 
 // Start Server

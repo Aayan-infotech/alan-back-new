@@ -6,7 +6,7 @@ const DimDoorWidthHeightSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    DimDoorWidthHeight: {
+    DoorWidthHeight: {
         type: String,
         required: true,
     },
@@ -22,4 +22,4 @@ const DimDoorWidthHeightSchema = new mongoose.Schema({
     }
 }, { timestamps: true }); 
 
-module.exports = mongoose.model('DimDoorWidthHeight', DimDoorWidthHeightSchema);
+module.exports = mongoose.model('DoorWidthHeight', DimDoorWidthHeightSchema);

@@ -7,7 +7,7 @@ const DimDoorWidthHeightSchema = new mongoose.Schema({
         required: false,
         default: null,
     },
-    widthHeight: {
+    DimDoorWidthHeight: {
         type: String, // Storing widthHeight as a single string
         required: true,
     },

@@ -73,6 +73,8 @@ const GMCardsRoutes = require("./routes/GMCardsRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const getAllCustData = require("./routes/FinalOrderRoutes");
 const DimDoorW_H_Routes = require("./routes/DimDoorW_H_Routes");
+const searchRoutes = require("./routes/searchRoutes");
+
 
 
 app.use("/api", adminUserManageRoutes);
@@ -102,6 +104,7 @@ app.use("/api/GMCards", GMCardsRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/FnalCustData", getAllCustData);
 app.use("/api/DimDoorW_H", DimDoorW_H_Routes);
+app.use("/api/search", searchRoutes);
 
 
 // Start Server

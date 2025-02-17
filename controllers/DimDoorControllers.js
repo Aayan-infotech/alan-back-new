@@ -36,6 +36,9 @@ const models = {
     DoorHingeColor: require('../models/DimDoor/DimDoorHingeColorModel'),
     DoorSill: require('../models/DimDoor/DimDoorSillModels'),
     DoorWeatherStripColor: require('../models/DimDoor/DimDoorWeatherStripColorModule'),
+    DoorBoreOptions: require('../models/DimDoor/DimDoorBoreOptionsModel'),
+    DoorInstallationAvailability: require('../models/DimDoor/DimDoorInstallationAvailabilityModel'),
+    DoorSideWindowOpens: require('../models/DimDoor/DimDoorSideWindowOpensModel'),
     DoorGridOptions: require('../models/DimDoor/DimDoorGridOptionsModels'),
     DoorFrameExtrusion: require('../models/DimDoor/DimDoorFrameExtrusionModel'),
     DoorLockOption: require('../models/DimDoor/DimDoorLockOptionModel'),
@@ -45,9 +48,6 @@ const models = {
     DoorShoe: require('../models/DimDoor/DimDoorShoeModel'),
     DoorWeatherstrip: require('../models/DimDoor/DimDoorWeatherstripModel'),
     DoorHinges: require('../models/DimDoor/DimDoorHingesModel'),
-    DoorBoreOptions: require('../models/DimDoor/DimDoorBoreOptionsModel'),
-    DoorInstallationAvailability: require('../models/DimDoor/DimDoorInstallationAvailabilityModel'),
-    DoorSideWindowOpens: require('../models/DimDoor/DimDoorSideWindowOpensModel')
 };
 
 exports.createDimDoor = async (req, res) => {

@@ -8,7 +8,7 @@ const dimsModels = {
     DoorSwingDirection: require('../models/DimDoor/DimDoorSwingDirectionModel'),
     DoorFrameOptions: require('../models/DimDoor/DimDoorFrameOptioModel'),
     DoorPeepView: require('../models/DimDoor/DimDoorPeepViewModel'),
-    DimDoorHingeColor: require('../models/DimDoor/DimDoorHingeColorModel'),
+    DoorHingeColor: require('../models/DimDoor/DimDoorHingeColorModel'),
     DoorSill: require('../models/DimDoor/DimDoorSillModels'),
     DoorWeatherStripColor: require('../models/DimDoor/DimDoorWeatherStripColorModule'),
     DoorGridOptions: require('../models/DimDoor/DimDoorGridOptionsModels'),

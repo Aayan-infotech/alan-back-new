@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 
 const dimsModels = {
+    //Door
     DoorWidthHeight: require('../models/DimDoor/DimDoorW_H_Models'),
+    DoorPreHungOptions: require('../models/DimDoor/DimDoorPreHungModel'),
+    DoorPreFinishingOptions: require('../models/DimDoor/DimDoorPreFinishingModel'),
+    DoorSwingDirection: require('../models/DimDoor/DimDoorSwingDirectionModel'),
+    DoorFrameOptions: require('../models/DimDoor/DimDoorFrameOptioModel'),
+    //w
     widthHeight:  require('../models/dimsWHmodel'),
     Grid: require('../models/dimsGridModel'),
     Fin: require('../models/dimsFinModel'),

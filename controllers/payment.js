@@ -117,15 +117,17 @@ exports.createPaymentIntent = async (req, res) => {
 
     await transaction.save();
 
-    const encryptedSecret = CryptoJS.AES.encrypt(
-      String(process.env.STRIPE_SECRET_KEY),
-      String(process.env.ENCRYPTION_KEY)
-    ).toString();
+    // const encryptedSecret = CryptoJS.AES.encrypt(
+    //   String(process.env.STRIPE_SECRET_KEY),
+    //   String(process.env.ENCRYPTION_KEY)
+    // ).toString();
 
     res.json({
       sessionId: session.id,
       session: session,
-      client_secret: encryptedSecret,
+      // client_secret: encryptedSecret,
+      client_secret: String(process.env.STRIPE_SECRET_KEY)
+
     });
   } catch (error) {
     console.error("Payment Processing Error:", error.message);

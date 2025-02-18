@@ -1,5 +1,15 @@
 const Product = require('../models/ProductModel');
 
+// Dimension constraints
+const dimensionLimits = {
+    "XO_Slider": { min: [24, 9.5], max: [48, 72] },
+    "XOX_Slider": { min: [72, 12], max: [144, 72] },
+    "Awning_Window": { min: [18, 18], max: [60, 60] },
+    "Single_Hung_Windows": { min: [11.5, 18], max: [48, 72] },
+    "Double_Hung_Windows": { min: [12, 24], max: [48, 84] },
+    "Picture_Window": { min: [8, 9.5], max: [96, 60] },
+    "Casement_Window": { min: [16, 18], max: [36, 72] },
+};
 
 // Formula map
 const formulaMap = {
@@ -11,7 +21,6 @@ const formulaMap = {
     "Casement_Window": (h, w) => h * w * 5.37 + 162,
     "Awning_Window": (h, w) => h * w * 4.7 + 235,
 };
-
 
 // Calculate price controller
 exports.calculatePrice = async (req, res) => {
@@ -35,23 +44,37 @@ exports.calculatePrice = async (req, res) => {
             });
         }
 
-        // Get the formula based on product name and calculate the formula-based price
-        const formula = formulaMap[product.name];
-        if (!formula) {
+        const productName = product.name;
+        const formula = formulaMap[productName];
+        const limits = dimensionLimits[productName];
+
+        if (!formula || !limits) {
             return res.status(400).json({
                 success: false,
-                message: `No formula found for the product: ${product.name}.`
+                message: `No formula or dimension limits found for the product: ${productName}.`
             });
         }
 
+        // Validate dimensions
+        const [minWidth, minHeight] = limits.min;
+        const [maxWidth, maxHeight] = limits.max;
+
+        if (width < minWidth || height < minHeight || width > maxWidth || height > maxHeight) {
+            return res.status(400).json({
+                success: false,
+                message: `Dimensions out of range for ${productName}. Minimum: ${minWidth}" x ${minHeight}", Maximum: ${maxWidth}" x ${maxHeight}".`
+            });
+        }
+
+        // Calculate price
         const formulaPrice = formula(height, width);
         const totalPrice = formulaPrice + Price;
 
         return res.status(200).json({
-            status:200,
+            status: 200,
             success: true,
             message: `Price calculated successfully for product`,
-            productNAME: `${product.name}`,
+            productNAME: productName,
             data: { width, height, formulaPrice, providedPrice: Price, totalPrice }
         });
     } catch (error) {
@@ -62,4 +85,3 @@ exports.calculatePrice = async (req, res) => {
         });
     }
 };
- 

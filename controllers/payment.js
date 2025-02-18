@@ -225,3 +225,48 @@ exports.completePayment = async (req, res) => {
   }
 };
 
+
+
+exports.createIntent = async (req, res) => {
+  try {
+    const { checkoutData } = req.body;
+
+    // Validate checkoutData
+    if (!checkoutData || typeof checkoutData !== 'object') {
+      return res.status(400).json({ error: "Invalid checkout data." });
+    }
+
+    const { totalPrice, totalProducts, shippingMethod } = checkoutData;
+
+    if (!totalPrice || !totalProducts || !shippingMethod) {
+      return res.status(400).json({ error: "Missing required checkout details." });
+    }
+
+    const totalPriceInPaise = Math.round(parseFloat(totalPrice) * 100);
+
+    // Ensure valid price
+    if (isNaN(totalPriceInPaise) || totalPriceInPaise <= 0) {
+      return res.status(400).json({ error: "Invalid total price." });
+    }
+
+    // Create payment intent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: totalPriceInPaise,
+      currency: 'usd',
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+
+    return res.status(200).json({
+      status: 200,
+      message: "Client secret key fetched successfully",
+      client_secret: paymentIntent.client_secret,
+    });
+
+  } catch (error) {
+    console.error("Payment Processing Error:", error);
+    return res.status(500).json({ error: "Payment processing failed. Please try again later." });
+  }
+};
+

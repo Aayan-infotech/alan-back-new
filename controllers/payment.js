@@ -270,3 +270,135 @@ exports.createIntent = async (req, res) => {
   }
 };
 
+
+// exports.paymentSuccess = async (req, res) => {
+//   try {
+//     const { paymentIntentId, orderDetails } = req.body;
+
+//     if (!paymentIntentId || !orderDetails) {
+//       return res.status(400).json({ 
+//         success: false, 
+//         error: "Missing paymentIntentId or order details." 
+//       });
+//     }
+
+//     // Fetch payment intent from Stripe
+//     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+//     if (paymentIntent.status !== 'succeeded') {
+//       return res.status(400).json({ 
+//         success: false, 
+//         error: "Payment not successful. Please try again." 
+//       });
+//     }
+
+//     // Store the order in the database
+//     const newOrder = new Order({
+//       userId: orderDetails.userId,
+//       products: orderDetails.products,
+//       totalAmount: orderDetails.totalPrice,
+//       paymentIntentId,
+//       paymentStatus: "Paid",
+//       shippingMethod: orderDetails.shippingMethod,
+//       createdAt: new Date(),
+//     });
+
+//     // await newOrder.save();
+
+//     return res.status(200).json({
+//       success: true,
+//       message: "Payment verified and order placed successfully.",
+//       orderId: newOrder._id
+//     });
+
+//   } catch (error) {
+//     console.error("Payment Verification Error:", error);
+//     res.status(500).json({ success: false, error: "Error verifying payment. Please try again." });
+//   }
+// };
+
+const jwt = require("jsonwebtoken");
+
+exports.paymentSuccess = async (req, res) => {
+  try {
+    const { paymentIntentId } = req.body;
+    const userId = req.userId;
+    
+    // Fetch payment intent details from Stripe
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    if (!paymentIntent) {
+      return res.status(400).json({ success: false, message: "Invalid Payment Intent." });
+    }
+
+    const paymentMethod = paymentIntent.payment_method_details || {};
+    const cardDetails = paymentMethod.card || {};
+
+    const query = { user_id: userId };
+    const orders = await Order.find(query);
+    if (!orders.length) {
+      return res.status(404).json({ success: false, message: "No orders found!" });
+    }
+
+    const finalOrders = [];
+    for (const order of orders) {
+      const customerData = await CustomerManage.findOne({ _id: order.user_id });
+      if (!customerData) {
+        return res.status(404).json({ success: false, message: "Customer details not found!" });
+      }
+
+      const finalOrder = new FinalOrder({
+        userId,
+        order_id: order._id,
+        orderData: {
+          product_name: order.name || "Unknown",
+          product_sku: order.sku || "Unknown",
+          product_price: order.product_price || 0,
+          total_price: order.totalPrice,
+          selected_options: order.selectedOptions,
+        },
+        status: paymentIntent.status || "Unknown",
+        paymentId: paymentIntent.id || "N/A",
+        quantity: order.quantity || 1,
+        amount: (paymentIntent.amount || 0) / 100,
+        payment_source: paymentIntent.payment_method_types,
+        customerDetails: {
+          name: customerData.name,
+          email: customerData.email,
+          mobile: customerData.mobile,
+          address: customerData.address,
+          state: customerData.state,
+          zipCode: customerData.zipCode,
+          country_name: customerData.country_name,
+        },
+        payer: {
+          card: {
+            brand: cardDetails.brand || "Unknown",
+            number: cardDetails.last4 ? `**** **** **** ${cardDetails.last4}` : "N/A",
+          },
+          email: paymentIntent.receipt_email || customerData.email,
+          name: customerData.name,
+          phone: customerData.mobile,
+        },
+      });
+
+      await finalOrder.save();
+      finalOrders.push(finalOrder);
+      await Order.findByIdAndDelete(order._id);
+    }
+
+    res.status(200).json({ 
+      success: true,
+      message: "Order completed successfully!",
+      orders: finalOrders,
+    });
+  } catch (error) {
+    console.error("Error in completing the payment:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error!",
+      error: error.message,
+    });
+  }
+};
+
+

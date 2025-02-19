@@ -226,7 +226,6 @@ exports.completePayment = async (req, res) => {
 };
 
 
-
 exports.createIntent = async (req, res) => {
   try {
     const { checkoutData } = req.body;

@@ -61,6 +61,7 @@ exports.calculatePrice = async (req, res) => {
 
         if (width < minWidth || height < minHeight || width > maxWidth || height > maxHeight) {
             return res.status(200).json({
+                status: 200,
                 success: false,
                 message: `Dimensions out of range for ${productName}. Minimum: ${minWidth}" x ${minHeight}", Maximum: ${maxWidth}" x ${maxHeight}".`
             });

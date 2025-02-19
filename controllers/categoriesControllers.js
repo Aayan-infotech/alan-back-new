@@ -100,12 +100,13 @@ exports.getCategoryById = async (req, res) => {
 // Update a category
 exports.updateCategory = async (req, res) => {
   try {
+    const imagePaths = req.fileLocations;
     const { image, name, status, update_ip, update_by } = req.body;
 
     const updatedCategory = await Category.findByIdAndUpdate(
       req.params.id,
       {
-        image,
+        images: imagePaths,
         name,
         status,
         update_date: Date.now(),

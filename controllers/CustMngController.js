@@ -476,3 +476,42 @@ exports.changePassword = async (req, res) => {
         });
     }
 };
+
+
+exports.deleteById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        if (!id) {
+            return res.status(400).json({
+                status: 400,
+                success: false,
+                message: "ID parameter is required"
+            });
+        }
+        
+        const deletedCustomer = await CustomerManage.findByIdAndDelete(id);
+        
+        if (!deletedCustomer) {
+            return res.status(404).json({
+                status: 404,
+                success: false,
+                message: "Customer not found"
+            });
+        }
+        
+        res.status(200).json({
+            status: 200,
+            success: true,
+            message: "Customer deleted successfully",
+            data: deletedCustomer
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 500,
+            success: false,
+            message: "Internal Server Error",
+            error: error.message
+        });
+    }
+};

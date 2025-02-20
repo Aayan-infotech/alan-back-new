@@ -11,5 +11,6 @@ router.put('/customers/:id', CustMngController.updateCustomer);
 router.post('/changePassword', CustMngController.changePassword);
 router.post('/forgetPassword', CustMngController.forgetPassword);
 router.post('/verifyForgetPasswordOTP', CustMngController.verifyForgetPasswordOTP);
+router.delete('/delete/:id', CustMngController.deleteById);
 
 module.exports = router;

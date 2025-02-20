@@ -6,63 +6,7 @@ const Order = require("../models/OrderModel");
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const CryptoJS = require("crypto-js");
 
-// exports.createPaymentIntent = async (req, res) => {
-//   try {
-//     const { checkoutData } = req.body;
-//     if (
-//       !checkoutData ||
-//       !checkoutData.totalPrice ||
-//       !checkoutData.totalProducts ||
-//       !checkoutData.shippingMethod
-//     ) {
-//       return res.status(400).json({ error: "Invalid checkout data." });
-//     }
-//     const totalPriceInPaise = Math.round(
-//       parseFloat(checkoutData.totalPrice) * 100
-//     );
-//     const session = await stripe.checkout.sessions.create({
-//       payment_method_types: ["card"],
-//       line_items: [
-//         {
-//           price_data: {
-//             currency: "inr",
-//             product_data: {
-//               name: "Total Purchase",
-//               description: `Total Products: ${checkoutData.totalProducts}`,
-//             },
-//             unit_amount: totalPriceInPaise,
-//           },
-//           quantity: 1,
-//         },
-//       ],
-//       mode: "payment",
-//       // success_url: "http://44.196.64.110:2040//successfull?session_id={CHECKOUT_SESSION_ID}",
-//       // cancel_url: "http://44.196.64.110:2040//cancel",
-//       success_url: `${process.env.ROUTE_BASE_URL}/successfull?session_id={CHECKOUT_SESSION_ID}`,
-//       cancel_url: `${process.env.ROUTE_BASE_URL}/cancel`,
-//       metadata: {
-//         userId: checkoutData.userId,
-//         order_id: checkoutData.order_id,
-//         totalPrice: checkoutData.totalPrice,
-//         totalProducts: checkoutData.totalProducts,
-//       },
-//     });
-//     const transaction = new Transaction({
-//       userId: checkoutData.userId,
-//       order_id: checkoutData.order_id,
-//       amount: session.amount_total / 100,
-//       quantity: parseInt(session.metadata.totalProducts),
-//       currency: session.currency,
-//       paymentId: session.id,
-//       status: session.payment_status,
-//     });
-//     await transaction.save();
-//     res.json({ sessionId: session.id, session: session });
-//   } catch (error) {
-//     console.error("Payment Processing Error:", error.message);
-//     res.status(500).json({ error: error.message });
-//   }
-// };
+// wab side
 
 exports.createPaymentIntent = async (req, res) => {
   try {
@@ -226,6 +170,8 @@ exports.completePayment = async (req, res) => {
 };
 
 
+// app 
+
 exports.createIntent = async (req, res) => {
   try {
     const { checkoutData } = req.body;
@@ -268,53 +214,6 @@ exports.createIntent = async (req, res) => {
     return res.status(500).json({ error: "Payment processing failed. Please try again later." });
   }
 };
-
-
-// exports.paymentSuccess = async (req, res) => {
-//   try {
-//     const { paymentIntentId, orderDetails } = req.body;
-
-//     if (!paymentIntentId || !orderDetails) {
-//       return res.status(400).json({ 
-//         success: false, 
-//         error: "Missing paymentIntentId or order details." 
-//       });
-//     }
-
-//     // Fetch payment intent from Stripe
-//     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-
-//     if (paymentIntent.status !== 'succeeded') {
-//       return res.status(400).json({ 
-//         success: false, 
-//         error: "Payment not successful. Please try again." 
-//       });
-//     }
-
-//     // Store the order in the database
-//     const newOrder = new Order({
-//       userId: orderDetails.userId,
-//       products: orderDetails.products,
-//       totalAmount: orderDetails.totalPrice,
-//       paymentIntentId,
-//       paymentStatus: "Paid",
-//       shippingMethod: orderDetails.shippingMethod,
-//       createdAt: new Date(),
-//     });
-
-//     // await newOrder.save();
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "Payment verified and order placed successfully.",
-//       orderId: newOrder._id
-//     });
-
-//   } catch (error) {
-//     console.error("Payment Verification Error:", error);
-//     res.status(500).json({ success: false, error: "Error verifying payment. Please try again." });
-//   }
-// };
 
 const jwt = require("jsonwebtoken");
 

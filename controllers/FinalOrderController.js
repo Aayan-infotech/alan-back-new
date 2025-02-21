@@ -80,6 +80,77 @@ exports.getAllCustData = async (req, res) => {
     }
 };
 
+// exports.getAllCustData = async (req, res) => {
+//     try {
+//         const orders = await FinalOrder.find();
+
+//         // Create a map to group data by paymentId
+//         const paymentGroupedOrders = new Map();
+
+//         orders.forEach(order => {
+//             const key = order.paymentId;
+
+//             const productDetails = {
+//                 order_id: order.order_id,
+//                 productName: order.orderData.product_name,
+//                 product_price: order.orderData.product_price,
+//                 productSku: order.orderData.product_sku,
+//                 selectedOptions: order.orderData.selected_options,
+//                 date: order.createdAt
+//             };
+
+//             if (!paymentGroupedOrders.has(key)) {
+//                 // Create a new entry for this paymentId
+//                 paymentGroupedOrders.set(key, {
+//                     id: order._id,
+//                     paymentId: order.paymentId,
+//                     paidAmount: order.amount,
+//                     paymentStatus: order.status,
+//                     totalPrice: order.orderData.total_price,
+//                     quantity: order.quantity,
+//                     orderStatus: order.orderStatus,
+
+//                     customerName: order.customerDetails.name,
+//                     customerEmail: order.customerDetails.email,
+//                     customerMobile: order.customerDetails.mobile,
+//                     customerAddress: order.customerDetails.address,
+//                     customerState: order.customerDetails.state,
+//                     customerZipCode: order.customerDetails.zipCode,
+//                     customerCountry: order.customerDetails.country_name || 'Unknown',
+
+//                     order_id: [productDetails.order_id].flat(), // Merge order IDs
+//                     productName: [productDetails.productName].flat(), // Merge product names
+//                     product_price: [productDetails.product_price].flat(), // Merge product prices
+//                     productSku: [productDetails.productSku].flat(), // Merge product SKUs
+//                     selectedOptions: [productDetails.selectedOptions].flat(), // Merge selected options
+//                     date: [productDetails.date].flat() // Merge dates
+//                 });
+//             } else {
+//                 // Merge order details into existing paymentId entry
+//                 const existingEntry = paymentGroupedOrders.get(key);
+//                 existingEntry.order_id.push(productDetails.order_id);
+//                 existingEntry.productName.push(productDetails.productName);
+//                 existingEntry.product_price.push(productDetails.product_price);
+//                 existingEntry.productSku.push(productDetails.productSku);
+//                 existingEntry.selectedOptions.push(productDetails.selectedOptions);
+//                 existingEntry.date.push(productDetails.date);
+
+//                 paymentGroupedOrders.set(key, existingEntry);
+//             }
+//         });
+
+//         // Convert map values to array
+//         const groupedOrders = Array.from(paymentGroupedOrders.values());
+
+//         return res.status(200).json(groupedOrders);
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({ message: 'Error retrieving orders', error: error.message });
+//     }
+// };
+
+
+
 
 exports.editFinalOrder = async (req, res) => {
     try {

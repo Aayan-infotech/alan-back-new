@@ -72,7 +72,8 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    NEXT_TAG=$(curl -s "https://hub.docker.com/v2/repositories/aayanindia/alan-backend/tags" | jq -r '.['"results"'] | sort_by(.name) | last | .name + 1')
+                    NEXT_TAG=$(curl -s "https://hub.docker.com/v2/repositories/aayanindia/alan-backend/tags?page_size=100" | \
+                        jq -r '.results[].name' | sort -V | tail -n 1 | awk '{print $1+1}')
                     echo "Next image tag: ${NEXT_TAG}"
                     '''
                 }

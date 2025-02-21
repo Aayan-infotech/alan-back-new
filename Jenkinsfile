@@ -1,36 +1,17 @@
 pipeline {
     agent any
 
-    parameters {
-        string(name: 'PROJECT_NAME', defaultValue: 'project1', description: 'Select the project name')
-    }
-
     environment {
-        IMAGE_NAME = "docker.io/aayanindia/trade-hunter-backend"
+        IMAGE_NAME = "docker.io/aayanindia/alan-backend"
         CONTAINER_PORT = "7878"
         HOST_PORT = "7878"
         DOCKER_HUB_USERNAME = credentials('docker-hub-username')
         DOCKER_HUB_PASSWORD = credentials('docker-hub-password')
-        EMAIL_RECIPIENTS = "rishabh.sharma@aayaninfotech.com"
-        SONARTOKEN = credentials('sonartoken')
-        AWS_CREDENTIALS_ID = 'aws-credentials'
+        EMAIL_RECIPIENTS = "atulrajput.work@gmail.com"
+        SONARTOKEN = credentials('sonartoken') // Securely use stored token
     }
 
     stages {
-        stage('AWS Credentials Injection') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: "${AWS_CREDENTIALS_ID}", usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                        sh '''
-                        echo "Using AWS Credentials for Project: ${PROJECT_NAME}"
-                        export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-                        export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-                        '''
-                    }
-                }
-            }
-        }
-
         stage('Checkout') {
             steps {
                 script {
@@ -59,7 +40,7 @@ pipeline {
                         -v $(pwd):/usr/src \
                         --network host \
                         sonarsource/sonar-scanner-cli:latest \
-                        -Dsonar.projectKey=trade-hunter-backend \
+                        -Dsonar.projectKey=handy-frontend \
                         -Dsonar.sources=/usr/src \
                         -Dsonar.host.url=http://54.236.98.193:9000 \
                         -Dsonar.login=${SONARTOKEN}
@@ -89,9 +70,9 @@ pipeline {
                 script {
                     def latestTag = sh(
                         script: '''
-                        curl -s https://hub.docker.com/v2/repositories/aayanindia/trade-hunter-backend/tags/ | \
+                        curl -s https://hub.docker.com/v2/repositories/aayanindia/handy-frontend/tags/ | \
                         jq -r '.results[].name' | grep -E '^stage-v[0-9]+$' | sort -V | tail -n1 | awk -F'v' '{print $2}'
-                        ''' ,
+                        ''',
                         returnStdout: true
                     ).trim()
 
@@ -110,9 +91,10 @@ pipeline {
                         set -eo pipefail
                         echo "Building Docker image..."
                         docker build -t ${IMAGE_NAME}:latest . 2>&1 | tee failure.log
-                        ''' ,
+                        ''',
                         returnStatus: true
                     )
+
                     if (buildResult != 0) {
                         error "❌ Docker build failed! Check failure.log"
                     }
@@ -204,6 +186,29 @@ pipeline {
                     </body>
                     </html>
                     """,
+                    to: "${EMAIL_RECIPIENTS}",
+                    from: "development.aayanindia@gmail.com",
+                    replyTo: "atulrajput.work@gmail.com",
+                    mimeType: 'text/html'
+                )
+            }
+        }
+
+        failure {
+            script {
+                echo "❌ Sending failure email with logs..."
+                emailext (
+                    subject: "🚨 Deployment Failed (Build #${BUILD_NUMBER})",
+                    body: """
+                    <html>
+                    <body>
+                    <p><strong>❌ Deployment Failed</strong></p>
+                    <p><strong>Logs:</strong> Attached below.</p>
+                    <p><strong>Check the <a href="${BUILD_URL}">console output</a>.</strong></p>
+                    </body>
+                    </html>
+                    """,
+                    attachLog: true,
                     to: "${EMAIL_RECIPIENTS}",
                     from: "development.aayanindia@gmail.com",
                     replyTo: "atulrajput.work@gmail.com",

@@ -6,25 +6,17 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME = "docker.io/aayanindia/alan-backend"
-        CONTAINER_PORT = "7878"
-        HOST_PORT = "7878"
+        IMAGE_NAME = "docker.io/aayanindia/trade-hunter-backend"
+        CONTAINER_PORT = "7777"
+        HOST_PORT = "7777"
         DOCKER_HUB_USERNAME = credentials('docker-hub-username')
         DOCKER_HUB_PASSWORD = credentials('docker-hub-password')
-        EMAIL_RECIPIENTS = "atul.rajput@aayaninfotech.com"
+        EMAIL_RECIPIENTS = "rishabh.sharma@aayaninfotech.com"
         SONARTOKEN = credentials('sonartoken')
-        AWS_CREDENTIALS_ID = "aws-cred-${params.PROJECT_NAME}"
+        AWS_CREDENTIALS_ID = 'aws-credentials'
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                script {
-                    checkout scm
-                }
-            }
-        }
-
         stage('AWS Credentials Injection') {
             steps {
                 script {
@@ -39,12 +31,20 @@ pipeline {
             }
         }
 
-        stage('Login to Docker Hub') {
+        stage('Checkout') {
+            steps {
+                script {
+                    checkout scm
+                }
+            }
+        }
+
+        stage('Run ESLint') {
             steps {
                 script {
                     sh '''
-                    echo "Logging in to Docker Hub..."
-                    echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+                    echo "Running ESLint..."
+                    npm run lint || echo "⚠️ ESLint completed with errors, but continuing pipeline..."
                     '''
                 }
             }
@@ -59,10 +59,90 @@ pipeline {
                         -v $(pwd):/usr/src \
                         --network host \
                         sonarsource/sonar-scanner-cli:latest \
-                        -Dsonar.projectKey=handy-frontend \
+                        -Dsonar.projectKey=trade-hunter-backend \
                         -Dsonar.sources=/usr/src \
                         -Dsonar.host.url=http://54.236.98.193:9000 \
                         -Dsonar.login=${SONARTOKEN}
+                    '''
+                }
+            }
+        }
+
+        stage('Login to Docker Hub') {
+            steps {
+                script {
+                    sh '''
+                    echo "Logging in to Docker Hub..."
+                    if echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin; then
+                        echo "✅ Docker Hub login successful!"
+                    else
+                        echo "❌ ERROR: Docker Hub login failed! Check credentials in Jenkins."
+                        exit 1
+                    fi
+                    '''
+                }
+            }
+        }
+
+        stage('Generate Next Image Tag') {
+            steps {
+                script {
+                    def latestTag = sh(
+                        script: '''
+                        curl -s https://hub.docker.com/v2/repositories/aayanindia/trade-hunter-backend/tags/ | \
+                        jq -r '.results[].name' | grep -E '^stage-v[0-9]+$' | sort -V | tail -n1 | awk -F'v' '{print $2}'
+                        ''' ,
+                        returnStdout: true
+                    ).trim()
+
+                    def newTag = latestTag ? "stage-v${latestTag.toInteger() + 1}" : "stage-v1"
+                    env.NEW_STAGE_TAG = newTag
+                    echo "🆕 New Docker Image Tag: ${newTag}"
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def buildResult = sh(
+                        script: '''#!/bin/bash
+                        set -eo pipefail
+                        echo "Building Docker image..."
+                        docker build -t ${IMAGE_NAME}:latest . 2>&1 | tee failure.log
+                        ''' ,
+                        returnStatus: true
+                    )
+                    if (buildResult != 0) {
+                        error "❌ Docker build failed! Check failure.log"
+                    }
+                }
+            }
+        }
+
+        stage('Tag Docker Image') {
+            steps {
+                script {
+                    sh '''
+                    echo "Tagging Docker image..."
+                    docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${NEW_STAGE_TAG}
+                    docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:prodv1
+                    '''
+                }
+            }
+        }
+
+        stage('Security Scan with Trivy') {
+            steps {
+                script {
+                    sh '''
+                    echo "Running Trivy security scan..."
+                    if docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image \
+                        --exit-code 0 --severity HIGH,CRITICAL ${IMAGE_NAME}:${NEW_STAGE_TAG}; then
+                        echo "✅ Trivy scan completed!"
+                    else
+                        echo "⚠️ Trivy scan found vulnerabilities, but continuing pipeline..."
+                    fi
                     '''
                 }
             }
@@ -120,13 +200,13 @@ pipeline {
                     <body>
                     <p><strong>Pipeline Status:</strong> ${currentBuild.currentResult}</p>
                     <p><strong>Build Number:</strong> ${BUILD_NUMBER}</p>
-                    <p><strong>Check the <a href=\"${BUILD_URL}\">console output</a>.</strong></p>
+                    <p><strong>Check the <a href="${BUILD_URL}">console output</a>.</strong></p>
                     </body>
                     </html>
                     """,
                     to: "${EMAIL_RECIPIENTS}",
                     from: "development.aayanindia@gmail.com",
-                    replyTo: "atul.rajput@aayaninfotech.com",
+                    replyTo: "atulrajput.work@gmail.com",
                     mimeType: 'text/html'
                 )
             }

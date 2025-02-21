@@ -7,8 +7,8 @@ pipeline {
 
     environment {
         IMAGE_NAME = "docker.io/aayanindia/trade-hunter-backend"
-        CONTAINER_PORT = "7777"
-        HOST_PORT = "7777"
+        CONTAINER_PORT = "7878"
+        HOST_PORT = "7878"
         DOCKER_HUB_USERNAME = credentials('docker-hub-username')
         DOCKER_HUB_PASSWORD = credentials('docker-hub-password')
         EMAIL_RECIPIENTS = "rishabh.sharma@aayaninfotech.com"

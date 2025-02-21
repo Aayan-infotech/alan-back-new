@@ -39,24 +39,6 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    sh '''
-                    echo "Running SonarQube analysis using Docker..."
-                    docker run --rm \
-                        -v $(pwd):/usr/src \
-                        --network host \
-                        sonarsource/sonar-scanner-cli:latest \
-                        -Dsonar.projectKey=trade-hunter-backend \
-                        -Dsonar.sources=/usr/src \
-                        -Dsonar.host.url=http://54.236.98.193:9000 \
-                        -Dsonar.login=${SONARTOKEN}
-                    '''
-                }
-            }
-        }
-
         stage('Login to Docker Hub') {
             steps {
                 script {
@@ -68,35 +50,31 @@ pipeline {
             }
         }
 
-        stage('Generate Next Image Tag') {
+        stage('SonarQube Analysis') {
             steps {
                 script {
                     sh '''
-                    NEXT_TAG=$(curl -s "https://hub.docker.com/v2/repositories/aayanindia/alan-backend/tags?page_size=100" | \
-                        jq -r '.results[].name' | sort -V | tail -n 1 | awk '{print $1+1}')
-                    echo "Next image tag: ${NEXT_TAG}"
+                    echo "Running SonarQube analysis using Docker..."
+                    docker run --rm \
+                        -v $(pwd):/usr/src \
+                        --network host \
+                        sonarsource/sonar-scanner-cli:latest \
+                        -Dsonar.projectKey=handy-frontend \
+                        -Dsonar.sources=/usr/src \
+                        -Dsonar.host.url=http://54.236.98.193:9000 \
+                        -Dsonar.login=${SONARTOKEN}
                     '''
                 }
             }
         }
 
-        stage('Build and Push Docker Image') {
+        stage('Push Docker Image to Docker Hub') {
             steps {
                 script {
                     sh '''
-                    docker build -t ${IMAGE_NAME}:latest .
-                    docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${NEXT_TAG}
-                    docker push ${IMAGE_NAME}:${NEXT_TAG}
-                    '''
-                }
-            }
-        }
-
-        stage('Security Scan with Trivy') {
-            steps {
-                script {
-                    sh '''
-                    trivy image ${IMAGE_NAME}:${NEXT_TAG}
+                    echo "Pushing Docker images to Docker Hub..."
+                    docker push ${IMAGE_NAME}:${NEW_STAGE_TAG}
+                    docker push ${IMAGE_NAME}:prodv1
                     '''
                 }
             }
@@ -106,9 +84,13 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    echo "Stopping existing container..."
                     CONTAINER_ID=$(docker ps -q --filter "publish=${HOST_PORT}")
                     if [ -n "$CONTAINER_ID" ]; then
-                        docker stop "$CONTAINER_ID" && docker rm "$CONTAINER_ID"
+                        docker stop "$CONTAINER_ID" || true
+                        docker rm "$CONTAINER_ID" || true
+                    else
+                        echo "No container running on port ${HOST_PORT}"
                     fi
                     '''
                 }
@@ -119,7 +101,8 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    docker run -d -p ${HOST_PORT}:${CONTAINER_PORT} ${IMAGE_NAME}:${NEXT_TAG}
+                    echo "Starting new container with latest image..."
+                    docker run -d -p ${HOST_PORT}:${CONTAINER_PORT} ${IMAGE_NAME}:prodv1
                     '''
                 }
             }

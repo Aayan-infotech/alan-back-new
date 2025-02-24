@@ -41,7 +41,7 @@ exports.createPaymentIntent = async (req, res) => {
       // success_url: "http://54.236.98.193:2040//successfull?session_id={CHECKOUT_SESSION_ID}",
       // cancel_url: "http://54.236.98.193:2040//cancel",
       success_url: `${process.env.ROUTE_BASE_URL}/successfull?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.ROUTE_BASE_URL}/cancel`,
+      cancel_url: `${process.env.ROUTE_BASE_URL}/cart`,
       metadata: {
         userId: checkoutData.userId,
         order_id: checkoutData.order_id,

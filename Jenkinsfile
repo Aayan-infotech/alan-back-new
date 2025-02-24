@@ -61,7 +61,7 @@ pipeline {
                         sonarsource/sonar-scanner-cli:latest \
                         -Dsonar.projectKey=handy-frontend \
                         -Dsonar.sources=/usr/src \
-                        -Dsonar.host.url=http://54.236.98.193:9000 \
+                        -Dsonar.host.url=http://18.221.196.222:9000 \
                         -Dsonar.login=${SONARTOKEN}
                     '''
                 }

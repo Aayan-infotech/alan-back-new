@@ -7,7 +7,7 @@ const secretsManagerClient = new SecretsManagerClient({ region: process.env.AWS_
 
 const getAwsCredentials = async () => {
   try {
-    const command = new GetSecretValueCommand({ SecretId: 'aws-7jan' });
+    const command = new GetSecretValueCommand({ SecretId: 'ecom' });
     const data = await secretsManagerClient.send(command);
 
     if (data.SecretString) {

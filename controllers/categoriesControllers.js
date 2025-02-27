@@ -168,7 +168,9 @@ exports.deleteCategory = async (req, res) => {
 
 exports.getAllCategories = async (req, res) => {
   try {
-    const categories = await Category.find();
+    // const categories = await Category.find();
+    // Fetch only categories where status is NOT 1
+    const categories = await Category.find({ status: { $ne: 1 } });
 
     // If no categories are found, return an appropriate message
     if (!categories || categories.length === 0) {
@@ -221,28 +223,28 @@ exports.getAllCategories = async (req, res) => {
 
 exports.updateStatus = async (req, res) => {
   try {
-      const { id } = req.params;
-      const { status } = req.body;
+    const { id } = req.params;
+    const { status } = req.body;
 
-      // Validate status value (only 0 or 1 allowed)
-      if (![0, 1].includes(status)) {
-          return res.status(400).json({ message: 'Invalid status value. Allowed values: 0 or 1' });
-      }
+    // Validate status value (only 0 or 1 allowed)
+    if (![0, 1].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status value. Allowed values: 0 or 1' });
+    }
 
-      // Find and update the category status
-      const category = await Category.findByIdAndUpdate(
-          id,
-          { status, update_date: Date.now() },
-          { new: true }
-      );
+    // Find and update the category status
+    const category = await Category.findByIdAndUpdate(
+      id,
+      { status, update_date: Date.now() },
+      { new: true }
+    );
 
-      if (!category) {
-          return res.status(404).json({ message: 'Category not found' });
-      }
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
 
-      res.status(200).json({ message: 'Status updated successfully', category });
+    res.status(200).json({ message: 'Status updated successfully', category });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal server error' });
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };

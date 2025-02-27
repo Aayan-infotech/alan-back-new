@@ -196,7 +196,9 @@ exports.updateStatus = async (req, res) => {
 
 exports.getAllCategories = async (req, res) => {
   try {
-    const categories = await Category.find();
+   // const categories = await Category.find();
+    // Fetch only categories where status is NOT 1
+    const categories = await Category.find({ status: { $ne: 0 } });
 
     // If no categories are found, return an appropriate message
     if (!categories || categories.length === 0) {

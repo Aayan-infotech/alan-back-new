@@ -17,5 +17,6 @@ router.get('/', getCategories);
 router.get('/:id', getCategoryById);
 router.put('/:id',uploadToS3,updateCategory);
 router.delete('/:id', deleteCategory);
+router.put('/updateStatus/:id',updateStatus);
 
 module.exports = router;

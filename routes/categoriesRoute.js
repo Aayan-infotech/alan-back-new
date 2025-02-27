@@ -6,7 +6,8 @@ const {
   getCategoryById,
   updateCategory,
   deleteCategory,
-  getAllCategories
+  getAllCategories,
+  updateStatus
 } = require('../controllers/categoriesControllers');
 const {uploadToS3}=require('../common/multerConfig');
 

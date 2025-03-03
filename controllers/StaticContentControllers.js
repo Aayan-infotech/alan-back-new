@@ -50,7 +50,6 @@ exports.getStaticContent = async (req, res) => {
         status: 400,
         success: false,
         message: "Invalid section name",
-        data: {}
       });
     }
 

@@ -74,7 +74,7 @@ const paymentRoutes = require("./routes/paymentRoutes");
 const getAllCustData = require("./routes/FinalOrderRoutes");
 const searchRoutes = require("./routes/searchRoutes");
 const DimDoorRoutes = require("./routes/DimDoorRoutes");
-const StaticContentRoutes = require("./routes/StaticContentRoutes");
+// const StaticContentRoutes = require("./routes/StaticContentRoutes");
 
 
 app.use("/api", adminUserManageRoutes);
@@ -105,7 +105,7 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/FnalCustData", getAllCustData);
 app.use("/api/search", searchRoutes);
 app.use("/api/DimDoor", DimDoorRoutes);
-app.use("/api/StaticContent", StaticContentRoutes);
+// app.use("/api/StaticContent", StaticContentRoutes);
 
 
 // Start Server

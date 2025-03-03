@@ -35,7 +35,27 @@ exports.upsertContent = async (req, res) => {
 exports.getStaticContent = async (req, res) => {
   try {
     const { section } = req.params;
-    const content = await StaticContent.findOne({ section });
+
+    // Map short section names to full names
+    const sectionMap = {
+      "About": "About Us",
+      "Conditions": "Terms & Conditions",
+      "Policy": "Privacy Policy"
+    };
+
+    const fullSectionName = sectionMap[section];
+
+    if (!fullSectionName) {
+      return res.status(400).json({
+        status: 400,
+        success: false,
+        message: "Invalid section name",
+        data: {}
+      });
+    }
+
+    const content = await StaticContent.findOne({ section: fullSectionName });
+
     if (!content) {
       return res.status(200).json({
         status: 200,
@@ -44,6 +64,7 @@ exports.getStaticContent = async (req, res) => {
         data: {}
       });
     }
+
     res.json({
       status: 200,
       success: true,
@@ -57,7 +78,7 @@ exports.getStaticContent = async (req, res) => {
     res.status(500).json({
       status: 500,
       success: false,
-      message: 'Server error',
+      message: "Server error",
       error
     });
   }

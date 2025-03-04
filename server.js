@@ -75,6 +75,8 @@ const getAllCustData = require("./routes/FinalOrderRoutes");
 const searchRoutes = require("./routes/searchRoutes");
 const DimDoorRoutes = require("./routes/DimDoorRoutes");
 const StaticContentRoutes = require("./routes/StaticContentRoutes");
+const updatePrices = require("./routes/PriceAdjustmentRoutes");
+
 
 
 app.use("/api", adminUserManageRoutes);
@@ -106,6 +108,8 @@ app.use("/api/FnalCustData", getAllCustData);
 app.use("/api/search", searchRoutes);
 app.use("/api/DimDoor", DimDoorRoutes);
 app.use("/api/StaticContent", StaticContentRoutes);
+app.use("/api/updatePrices", updatePrices);
+
 
 
 // Start Server

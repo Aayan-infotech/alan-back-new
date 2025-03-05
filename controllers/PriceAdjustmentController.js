@@ -99,3 +99,47 @@ exports.getAllPriceAdjustments = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });  // Handle server errors
   }
 };
+
+
+exports.updateProductPrices = async (req, res) => {
+    try {
+        const { category_id, sub_category_id, sub_sub_category_id, divide } = req.body;
+
+        if (!divide || isNaN(divide) || divide <= 0) {
+            return res.status(400).json({ message: "Invalid divide factor" });
+        }
+
+        let filter = { category_id };
+
+        if (sub_category_id) {
+            filter.sub_category_id = sub_category_id;
+        }
+
+        if (sub_sub_category_id) {
+            filter.sub_sub_category_id = sub_sub_category_id;
+        }
+
+        // Determine price adjustment type
+        const adjustmentType = divide > 1 ? "decrease" : "increase";
+
+        // Find and update products that have a valid numeric price
+        const result = await Product.updateMany(
+            { ...filter, price: { $ne: null } }, 
+            { $mul: { price: 1 / divide } } // Divide the price by the given factor
+        );
+
+        // Log the price adjustment
+        await PriceAdjustmentHistory.create({
+            category_id,
+            sub_category_id: sub_category_id || null,
+            sub_sub_category_id: sub_sub_category_id || null,
+            updatePercent: divide,
+            PriceAdjustment: adjustmentType
+        });
+
+        res.json({ message: `${result.modifiedCount} products updated successfully.` });
+    } catch (error) {
+        console.error('Error updating prices:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};

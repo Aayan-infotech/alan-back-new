@@ -63,6 +63,9 @@ exports.updatePrices = async (req, res) => {
             filter.sub_sub_category_id = sub_sub_category_id;
         }
 
+        // Determine price adjustment type
+        const adjustmentType = updateFactor > 1 ? "increase" : "decrease";
+
         // Find and update products that have a valid numeric price
         const result = await Product.updateMany(
             { ...filter, price: { $ne: null } }, // Ensure price is not null
@@ -74,7 +77,8 @@ exports.updatePrices = async (req, res) => {
             category_id,
             sub_category_id: sub_category_id || null,
             sub_sub_category_id: sub_sub_category_id || null,
-            updatePercent: updateFactor
+            updatePercent: updateFactor,
+            PriceAdjustment: adjustmentType
         });
 
         res.json({ message: `${result.modifiedCount} products updated successfully.` });

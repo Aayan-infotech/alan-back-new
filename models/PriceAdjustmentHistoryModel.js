@@ -24,6 +24,11 @@ const PriceAdjustment = new mongoose.Schema({
     updatePercent: {
         type: Number, 
         required: true
+    },
+    PriceAdjustment: {
+        type: String,
+        enum: ['increase', 'decrease'],
+        required: true
     }
 });
 

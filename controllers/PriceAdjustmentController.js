@@ -1,5 +1,9 @@
 const Product = require("../models/ProductModel");
 const PriceAdjustmentHistory = require("../models/PriceAdjustmentHistoryModel");
+const SubSubCategory = require("../models/subSubCategoryModels");
+const Categories = require("../models/categoriesModels");
+const SubCategories = require("../models/subCategoryModels");
+
 
 // Mass update product prices  
 // exports.updatePrices = async (req, res) => {
@@ -89,16 +93,42 @@ exports.updatePrices = async (req, res) => {
 };
 
 
-// Controller to get all price adjustments
 exports.getAllPriceAdjustments = async (req, res) => {
-  try {
-    const priceAdjustments = await PriceAdjustmentHistory.find();  // Retrieve all documents from PriceAdjustment collection
-    res.status(200).json(priceAdjustments);  // Send the result back as JSON
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server Error' });  // Handle server errors
-  }
-};
+    try {
+      // Step 1: Get all PriceAdjustmentHistory
+      const priceAdjustments = await PriceAdjustmentHistory.find();
+  
+      // Step 2: Map through products and manually fetch category, sub-category, and sub-sub-category data
+      const priceAdjustmentsWithNames = await Promise.all(
+        priceAdjustments.map(async (adjustment) => {
+          const category = adjustment.category_id
+            ? await Categories.findById(adjustment.category_id)
+            : null;
+          const subCategory = adjustment.sub_category_id
+            ? await SubCategories.findById(adjustment.sub_category_id)
+            : null;
+          const subSubCategory = adjustment.sub_sub_category_id
+            ? await SubSubCategory.findById(adjustment.sub_sub_category_id)
+            : null;
+  
+          return {
+            _id: adjustment._id,
+            category_name: category ? category.name : "N/A",
+            sub_category_name: subCategory ? subCategory.name : "N/A",
+            sub_sub_category_name: subSubCategory ? subSubCategory.name : "N/A",
+            updatePercent: adjustment.updatePercent,
+            PriceAdjustment: adjustment.PriceAdjustment,
+            date: adjustment.date,
+          };
+        })
+      );
+  
+      res.status(200).json(priceAdjustmentsWithNames); // Send the result back as JSON
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server Error" }); // Handle server errors
+    }
+  };
 
 
 exports.updateProductPrices = async (req, res) => {

@@ -192,7 +192,7 @@ exports.trackOrder = async (req, res) => {
         const order = await FinalOrder.findOne({ order_id });
 
         if (!order) {
-            return res.status(404).json({
+            return res.status(200).json({
                 success: false,
                 message: 'Order not found'
             });

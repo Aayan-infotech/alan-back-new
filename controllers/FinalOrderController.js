@@ -70,6 +70,8 @@ exports.getAllCustData = async (req, res) => {
             customerState: order.customerDetails.state, // Customer state
             customerZipCode: order.customerDetails.zipCode, // Customer zip code
             customerCountry: order.customerDetails.country_name || 'Unknown', // Customer country (fallback to 'Unknown' if not available)
+            trackId: order.trackId || '',
+            trackPartner: order.trackPartner || ''
         }));
 
         // Send response with the order details

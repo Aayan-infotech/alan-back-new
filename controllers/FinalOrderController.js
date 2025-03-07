@@ -188,6 +188,14 @@ exports.trackOrder = async (req, res) => {
             });
         }
 
+        // Validate if order_id is a valid MongoDB ObjectId
+        if (!mongoose.Types.ObjectId.isValid(order_id)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid Order ID format'
+            });
+        }
+        
         // Find the order by order_id
         const order = await FinalOrder.findOne({ order_id });
 

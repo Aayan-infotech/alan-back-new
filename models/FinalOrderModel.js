@@ -143,6 +143,15 @@ const FinalOrderSchema = new mongoose.Schema({
         name: { type: String },
         phone: { type: String }
     },
+    
+    trackId: {
+        type: String,
+        required: false
+    },
+    trackPartner: {
+        type: String,
+        required: false
+    }
 
 }, { timestamps: true });
 

@@ -45,17 +45,17 @@ app.use(
 );
 
 // show page
-const path = require("path");
+// const path = require("path");
 
 // Serve static files
-app.use("/page", express.static(path.join(__dirname, "uploads")));
+// app.use("/page", express.static(path.join(__dirname, "public")));
 
 // Serve index.html for root URL
 
-app.get("/", (req, res) => {
-  console.log(111);
-  res.sendFile(path.join(__dirname, "uploads", "index.html"));
-});
+// app.get("/", (req, res) => {
+//   console.log(111);
+//   res.sendFile(path.join(__dirname, "public", "index.html"));
+// });
 
 
 connectDB();

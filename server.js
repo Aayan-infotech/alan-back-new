@@ -48,11 +48,13 @@ app.use(
 const path = require("path");
 
 // Serve static files
-app.use("/page", express.static(path.join(__dirname, "public")));
+app.use("/page", express.static(path.join(__dirname, "uploads")));
 
 // Serve index.html for root URL
-app.get("/page", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+
+app.get("/", (req, res) => {
+  console.log(111);
+  res.sendFile(path.join(__dirname, "uploads", "index.html"));
 });
 
 

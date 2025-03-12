@@ -22,6 +22,16 @@ const formulaMap = {
     "Awning_Window": (h, w) => (h + w) * 4.7 + 235,
 };
 
+// const formulaMap = {
+//     "XO_Slider": (h, w) => h + w * 3.694 + 38,
+//     "XOX_Slider": (h, w) => h + w * 4.639 - 108,
+//     "Single_Hung_Windows": (h, w) => h + w * 3.694 + 50,
+//     "Double_Hung_Windows": (h, w) => h + w * 3.694 + 50,
+//     "Picture_Window": (h, w) => h + w * 3.696 - 50,
+//     "Casement_Window": (h, w) => h + w * 5.37 + 162,
+//     "Awning_Window": (h, w) => h + w * 4.7 + 235,
+// };
+
 
 // Calculate price controller
 exports.calculatePrice = async (req, res) => {

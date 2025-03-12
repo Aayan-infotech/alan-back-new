@@ -27,7 +27,7 @@ app.use("/uploads", express.static("uploads"));
 app.use(cors());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://18.221.196.222:2040", "http://localhost:7878"],
+    origin: ["http://localhost:5173", "http://54.236.98.193:2040", "http://localhost:7878"],
     methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
     optionsSuccessStatus: 200,
@@ -43,20 +43,6 @@ app.use(
     cookie: { secure: false },
   })
 );
-
-// show page
-// const path = require("path");
-
-// Serve static files
-// app.use("/page", express.static(path.join(__dirname, "public")));
-
-// Serve index.html for root URL
-
-// app.get("/", (req, res) => {
-//   console.log(111);
-//   res.sendFile(path.join(__dirname, "public", "index.html"));
-// });
-
 
 connectDB();
 

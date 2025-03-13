@@ -2,7 +2,8 @@ const Product = require('../models/ProductModel');
 
 // Dimension constraints
 const dimensionLimits = {
-    "XO_Slider": { min: [24, 9.5], max: [48, 72] },
+    // "XO_Slider": { min: [24, 9.5], max: [48, 72] },
+    "XO_Slider": { min: [72, 9.5], max: [48, 72] },
     "XOX_Slider": { min: [72, 12], max: [144, 72] },
     "Awning_Window": { min: [18, 18], max: [60, 60] },
     "Single_Hung_Windows": { min: [11.5, 18], max: [48, 72] },
